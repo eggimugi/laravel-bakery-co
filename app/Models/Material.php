@@ -1,0 +1,23 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Material extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'material_name',
+        'stock',
+        'unit',
+        'material_type',
+    ];
+
+    public function compositions()
+    {
+        return $this->hasMany(Composition::class);
+    }
+}

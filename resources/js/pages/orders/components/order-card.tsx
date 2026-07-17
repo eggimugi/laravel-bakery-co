@@ -1,0 +1,165 @@
+import { router } from '@inertiajs/react';
+import { useState } from 'react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+    Card,
+    CardContent,
+    CardFooter,
+    CardHeader,
+} from '@/components/ui/card';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogTitle,
+} from '@/components/ui/dialog';
+import { Separator } from '@/components/ui/separator';
+import { formatRupiah } from '@/lib/currency';
+import { formatDate } from '@/lib/date';
+import { formatTime } from '@/lib/time';
+import { destroy, show, update } from '@/routes/orders';
+import type { Order } from '@/types';
+
+type Props = {
+    order: Order;
+    canManageOrder: boolean;
+};
+
+export function OrderCard({ order, canManageOrder }: Props) {
+    const [showRemoveDialog, setShowRemoveDialog] = useState(false);
+
+    const totalPrice = order.detail_orders.reduce(
+        (total, detailOrder) =>
+            total + detailOrder.cake.cake_price * detailOrder.quantity,
+        0,
+    );
+
+    if (!canManageOrder) {
+        return null;
+    }
+
+    return (
+        <>
+            <Card className="w-full">
+                <CardHeader className="">
+                    <div className="flex items-start justify-between">
+                        <div className="">
+                            <h2 className="text-xl font-bold">
+                                {order.user.name}
+                            </h2>
+                            <p className="text-muted-foreground">
+                                Order #{order.id}
+                            </p>
+                        </div>
+
+                        <Badge className="capitalize">{order.status}</Badge>
+                    </div>
+
+                    <div className="flex items-start justify-between">
+                        <p>{formatDate(order.order_date)}</p>
+                        <p>{formatTime(order.order_date)}</p>
+                    </div>
+                </CardHeader>
+                <Separator />
+                <CardContent>
+                    <div className="flex items-center justify-between text-muted-foreground">
+                        <p className="font-semibold">Cake Name</p>
+                        <p className="font-semibold">Quantity</p>
+                        <p className="font-semibold">Subtotal</p>
+                    </div>
+                    {order.detail_orders.map((detailOrder) => (
+                        <div
+                            key={detailOrder.id}
+                            className="flex items-center justify-between"
+                        >
+                            <p>{detailOrder.cake.cake_name}</p>
+                            <p className="flex items-center gap-1">
+                                {detailOrder.quantity}{' '}
+                                <span className="text-sm text-muted-foreground capitalize">
+                                    {detailOrder.cake.unit}
+                                </span>
+                            </p>
+                            <p>
+                                {formatRupiah(
+                                    detailOrder.cake.cake_price *
+                                        detailOrder.quantity,
+                                )}
+                            </p>
+                        </div>
+                    ))}
+
+                    <Separator className="my-4" />
+
+                    <div className="flex items-center justify-between">
+                        <p className="font-semibold">Total</p>
+                        <p className="font-semibold">
+                            {formatRupiah(totalPrice)}
+                        </p>
+                    </div>
+                </CardContent>
+
+                <Separator />
+
+                <CardFooter>
+                    <div className="flex w-full items-center justify-between">
+                        <Button
+                            disabled={
+                                order.status === 'completed' ||
+                                order.status === 'cancelled'
+                            }
+                            onClick={() => router.put(update(order.id))}
+                            variant={order.status === 'completed' ? 'secondary' : 'default'}
+                        >
+                            Finish Order
+                        </Button>
+                        <Button onClick={() => router.visit(show(order.id))}>
+                            See Details
+                        </Button>
+                        <Button
+                            disabled={
+                                order.status === 'completed' ||
+                                order.status === 'cancelled'
+                            }
+                            variant="secondary"
+                            onClick={() => setShowRemoveDialog(true)}
+                        >
+                            Cancel Order
+                        </Button>
+                    </div>
+                </CardFooter>
+            </Card>
+
+            <Dialog open={showRemoveDialog} onOpenChange={setShowRemoveDialog}>
+                <DialogContent>
+                    <DialogTitle>
+                        Are you sure you want to cancel order {order.id}?
+                    </DialogTitle>
+                    <DialogDescription>
+                        Once you cancel this order, all of their resources and
+                        data will also be permanently deleted.
+                    </DialogDescription>
+                    <DialogFooter className="gap-2">
+                        <Button
+                            variant="secondary"
+                            onClick={() => setShowRemoveDialog(false)}
+                        >
+                            Back
+                        </Button>
+                        <Button
+                            variant="destructive"
+                            onClick={() => {
+                                router.delete(destroy(order.id).url, {
+                                    onSuccess: () => setShowRemoveDialog(false),
+                                });
+                            }}
+                        >
+                            Cancel Order
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+        </>
+    );
+}

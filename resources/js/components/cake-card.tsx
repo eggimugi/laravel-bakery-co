@@ -1,0 +1,44 @@
+import { formatRupiah } from '@/lib/currency';
+import type { Cake } from '@/types';
+import { Badge } from './ui/badge';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from './ui/card';
+
+type Props = {
+    cake: Cake;
+};
+
+export function CakeCard({ cake }: Props) {
+    return (
+        <Card className='gap-4'>
+            <CardHeader className='gap-4'>
+                <Badge variant="secondary" className="text-sm">
+                    Available: {cake.stock}
+                </Badge>
+                <img
+                    src={'/croissant.jpg'}
+                    alt={cake.cake_name}
+                    className="h-48 w-full rounded-lg object-cover"
+                />
+            </CardHeader>
+
+            <CardContent>
+                <CardTitle>{cake.cake_name}</CardTitle>
+                <CardDescription>
+                    <div className="flex items-center justify-between">
+                        <p>{cake.cake_flavour}</p>
+
+                        <p className="font-semibold">
+                            {formatRupiah(cake.cake_price)}
+                        </p>
+                    </div>
+                </CardDescription>
+            </CardContent>
+        </Card>
+    );
+}
