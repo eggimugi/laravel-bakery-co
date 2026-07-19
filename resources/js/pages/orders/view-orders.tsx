@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { create, index } from '@/routes/orders';
 import type { Order } from '@/types';
 import { OrderCard } from './components/order-card';
+import { ViewOrderStats } from './components/view-order-stats';
 
 type Paginated<T> = {
     data: T[];
@@ -13,22 +14,30 @@ type Paginated<T> = {
 
 type Props = {
     orders: Paginated<Order>;
+    stats: {
+        totalOrder: number;
+        completed: number;
+        processing: number;
+    };
 };
 
-export default function ViewOrders({ orders }: Props) {
+export default function ViewOrders({ orders, stats }: Props) {
     return (
         <>
             <Head title={'Orders'} />
             <Container>
                 <div className="flex w-full flex-col lg:flex-row">
                     <div className="min-w-0 flex-1">
-                        <div className="sticky top-0 space-y-4 bg-background py-4">
-                            <div className="flex items-center justify-between">
-                                <h1 className="text-2xl font-bold">
-                                    View Order
-                                </h1>
+                        <ViewOrderStats stats={stats} />
 
-                                <div className="flex items-center gap-4">
+                        <div className="sticky top-16 space-y-4 bg-background py-4">
+                            <div className="flex items-center gap-6">
+                                <Input
+                                    placeholder="Search..."
+                                    className="w-full"
+                                />
+
+                                <div className="flex items-center gap-6">
                                     <Button variant="outline" size="icon">
                                         <SlidersVertical />
                                     </Button>
@@ -40,8 +49,6 @@ export default function ViewOrders({ orders }: Props) {
                                     </Button>
                                 </div>
                             </div>
-
-                            <Input placeholder="Search..." className="w-full" />
 
                             <div className="flex items-center gap-4">
                                 <Button variant="outline" size="default">
@@ -63,7 +70,7 @@ export default function ViewOrders({ orders }: Props) {
                         </div>
 
                         <InfiniteScroll data="orders">
-                            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                            <div className="grid grid-cols-1 gap-6 xl:grid-cols-2 2xl:grid-cols-3">
                                 {orders.data.map((order) => (
                                     <div key={order.id}>
                                         <OrderCard

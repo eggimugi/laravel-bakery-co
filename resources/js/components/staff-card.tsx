@@ -11,7 +11,7 @@ export default function StaffCard({ staff }: Props) {
     return (
         <>
             <Card className="gap-4">
-                <CardContent className="gap-0">
+                <CardContent className="space-y-2">
                     <div className="flex items-center justify-between">
                         <p className="font-semibold">{staff.name}</p>
 

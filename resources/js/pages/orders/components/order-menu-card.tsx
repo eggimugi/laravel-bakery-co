@@ -33,20 +33,22 @@ export function OrderMenuCard({
 
     return (
         <>
-            <Card className="w-full flex-row px-4">
+            <Card className="h-full w-full flex-row px-4">
                 <img
                     src="/cake-placeholder.png"
                     alt="Event cover"
                     className="aspect-square size-36 object-contain"
                 />
-                <CardContent className="w-full space-y-2 px-0">
-                    <CardTitle>{cake.cake_name}</CardTitle>
-                    <CardDescription>
-                        <p>
-                            <span className="capitalize">Flavour:</span>{' '}
+                <CardContent className="flex w-full flex-col justify-between gap-2 px-0">
+                    <CardTitle>
+                        {cake.cake_name}
+                        <p className="text-sm text-muted-foreground font-normal">
                             {cake.cake_flavour}
                         </p>
-                        <p className="mt-2 text-lg text-primary">
+                    </CardTitle>
+
+                    <CardDescription className="flex flex-col gap-2">
+                        <p className="text-lg text-primary">
                             {formatRupiah(cake.cake_price)}
                         </p>
                         <p className="font-semibold">

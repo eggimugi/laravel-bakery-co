@@ -19,8 +19,15 @@ class OrderController extends Controller
     {
         $orders = Order::with(['user', 'detailOrders.cake'])->paginate();
 
+        $stats = [
+            'totalOrder' => Order::count(),
+            'completed' => Order::where('status', 'completed')->count(),
+            'processing' => Order::where('status', 'processing')->count(),
+        ];
+
         return Inertia::render('orders/view-orders', [
             'orders' => Inertia::scroll(fn () => $orders),
+            'stats' => $stats,
         ]);
     }
 
@@ -31,8 +38,15 @@ class OrderController extends Controller
     {
         $cakes = Cake::paginate();
 
+        $stats = [
+            'totalCakes' => Cake::count(),
+            'available' => Cake::where('stock', '>', 0)->count(),
+            'unavailable' => Cake::where('stock', '=', 0)->count(),
+        ];
+
         return Inertia::render('orders/order', [
             'cakes' => Inertia::scroll(fn () => $cakes),
+            'stats' => $stats,
         ]);
     }
 

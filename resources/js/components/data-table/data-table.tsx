@@ -66,7 +66,7 @@ export function DataTable<TData, TValue>({
             <DataTableProvider value={{ ...table } as never}>
                 {typeof toolbar === 'function' ? toolbar() : toolbar}
 
-                <div className="overflow-hidden rounded-md border p-4">
+                <div className="overflow-hidden rounded-md border px-6 py-4">
                     <Table>
                         <TableHeader>
                             {table.getHeaderGroups().map((headerGroup) => (
@@ -120,7 +120,7 @@ export function DataTable<TData, TValue>({
                     </Table>
                 </div>
 
-                <div className="flex items-center justify-end space-x-2 py-4">
+                <div className="flex items-center justify-end space-x-2 pt-4">
                     <Button
                         variant="outline"
                         size="sm"

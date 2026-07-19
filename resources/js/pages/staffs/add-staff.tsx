@@ -1,5 +1,6 @@
 import { Form, Head } from '@inertiajs/react';
 import { Link } from '@inertiajs/react';
+import { toast } from 'sonner';
 import { Container } from '@/components/container';
 import InputError from '@/components/form/input-error';
 import PasswordInput from '@/components/password-input';
@@ -37,7 +38,10 @@ export default function AddStaff({ passwordRules, stats }: Props) {
 
                 <Form
                     {...store.form()}
-                    resetOnSuccess={['password', 'password_confirmation']}
+                    onSuccess={() => {
+                        toast.success('Staff created successfully.');
+                    }}
+                    resetOnSuccess
                     disableWhileProcessing
                     className="w-full rounded-xl border p-4"
                 >

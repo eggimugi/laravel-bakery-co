@@ -1,5 +1,6 @@
 import { Head, Link } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
+import { toast } from 'sonner';
 import { Container } from '@/components/container';
 import { FormField } from '@/components/form/form-field';
 import { FormHeader } from '@/components/form/form-header';
@@ -10,13 +11,19 @@ import { Spinner } from '@/components/ui/spinner';
 import { useAddSupply } from '@/hooks/use-add-supply';
 import { index as suppliesIndex, store } from '@/routes/supplies';
 import { SupplyRowField } from './components/supply-row-field';
+import { SupplyStatsHeader } from './components/supply-stats-header';
 
 type Props = {
     suppliers: { id: number; supplier_name: string }[];
     materials: { id: number; material_name: string }[];
+    stats: {
+        totalSupplies: number;
+        completed: number;
+        cancelled: number;
+    };
 };
 
-export default function AddSupply({ suppliers, materials }: Props) {
+export default function AddSupply({ suppliers, materials, stats }: Props) {
     const {
         data,
         setData,
@@ -26,11 +33,17 @@ export default function AddSupply({ suppliers, materials }: Props) {
         addRow,
         removeRow,
         post,
+        reset
     } = useAddSupply();
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(store.url());
+        post(store.url(), {
+            onSuccess: () => {
+                toast.success('Supply added successfully');
+                reset()
+            },
+        });
     };
 
     return (
@@ -54,6 +67,8 @@ export default function AddSupply({ suppliers, materials }: Props) {
                         />
                     ))}
                 </datalist>
+
+                <SupplyStatsHeader stats={stats} />
 
                 <form
                     onSubmit={submit}
@@ -134,9 +149,7 @@ export default function AddSupply({ suppliers, materials }: Props) {
                                                 errors[
                                                     `items.${index}.quantity`
                                                 ],
-                                            unit: errors[
-                                                `items.${index}.unit`
-                                            ],
+                                            unit: errors[`items.${index}.unit`],
                                         }}
                                         canRemove={data.items.length > 1}
                                         onChange={(patch) =>
@@ -181,3 +194,15 @@ export default function AddSupply({ suppliers, materials }: Props) {
         </>
     );
 }
+
+AddSupply.layout = {
+    breadcrumbs: [
+        {
+            title: 'Supplies',
+            href: suppliesIndex(),
+        },
+        {
+            title: 'Add Supply',
+        },
+    ],
+};

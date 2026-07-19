@@ -1,6 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
 import type { FormEvent, ReactNode } from 'react';
+import { toast } from 'sonner';
 import { Container } from '@/components/container';
 import { FormHeader } from '@/components/form/form-header';
 import { Button } from '@/components/ui/button';
@@ -10,20 +11,30 @@ import { useEditComposition } from '@/hooks/Composition Row/use-edit-composition
 import AppLayout from '@/layouts/app-layout';
 import { update, show as compositionsShow } from '@/routes/compositions';
 import type { CakeWithCompositions, Material } from '@/types';
+import { CompositionsStatsHeader } from './components/composition-stats-header';
 import { CompositionRowField } from './components/row-field';
 
 type Props = {
     cake: CakeWithCompositions;
     materials: Material[];
+    stats: {
+        totalCakes: number;
+        compositions: number;
+        noCompositions: number;
+    };
 };
 
-export default function EditComposition({ cake, materials }: Props) {
+export default function EditComposition({ cake, materials, stats }: Props) {
     const { data, processing, errors, updateRow, addRow, removeRow, put } =
         useEditComposition(cake);
 
     const submit = (e: FormEvent) => {
         e.preventDefault();
-        put(update.url(cake.id));
+        put(update.url(cake.id), {
+            onSuccess: () => {
+                toast.success('Composition updated successfully');
+            },
+        });
     };
 
     return (
@@ -38,6 +49,8 @@ export default function EditComposition({ cake, materials }: Props) {
                         />
                     ))}
                 </datalist>
+
+                <CompositionsStatsHeader stats={stats} />
 
                 <form
                     onSubmit={submit}

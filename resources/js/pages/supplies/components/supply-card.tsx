@@ -1,6 +1,7 @@
 import { router } from '@inertiajs/react';
 import { MoreHorizontal } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -90,21 +91,23 @@ export function SupplyCard({ supply, canEdit, canRemove }: Props) {
                         <div className="flex items-center justify-between">
                             <div className="flex flex-col">
                                 <p>
-                                    <span className="font-semibold capitalize">
-                                        Address:
-                                    </span>{' '}
                                     {supply.supplier.supplier_address}
                                 </p>
                                 <p>
-                                    <span className="font-semibold">
-                                        Phone:
-                                    </span>{' '}
                                     {supply.supplier.supplier_phone}
                                 </p>
                             </div>
 
-                            <Badge variant={supply.cancelled_at ? 'default' : 'secondary'}>
-                                {supply.cancelled_at ? 'Cancelled' : 'Completed'}
+                            <Badge
+                                variant={
+                                    supply.cancelled_at
+                                        ? 'default'
+                                        : 'secondary'
+                                }
+                            >
+                                {supply.cancelled_at
+                                    ? 'Cancelled'
+                                    : 'Completed'}
                             </Badge>
                         </div>
 
@@ -163,7 +166,12 @@ export function SupplyCard({ supply, canEdit, canRemove }: Props) {
                             variant="destructive"
                             onClick={() => {
                                 router.delete(destroy(supply.id).url, {
-                                    onSuccess: () => setShowRemoveDialog(false),
+                                    onSuccess: () => {
+                                        toast.success(
+                                            'Supply cancelled successfully',
+                                        );
+                                        setShowRemoveDialog(false);
+                                    },
                                 });
                             }}
                         >

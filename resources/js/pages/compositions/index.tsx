@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { usePermission } from '@/hooks/use-permission';
 import { index } from '@/routes/compositions';
 import type { CakeWithCompositions, PaginationLinkType } from '@/types';
+import { CompositionsStatsHeader } from './components/composition-stats-header';
 
 type PaginatedCakes = {
     data: CakeWithCompositions[];
@@ -16,9 +17,14 @@ type PaginatedCakes = {
 type Props = {
     cakes: PaginatedCakes;
     filters?: { search?: string };
+    stats: {
+        totalCakes: number;
+        compositions: number;
+        noCompositions: number;
+    };
 };
 
-export default function Compositions({ cakes }: Props) {
+export default function Compositions({ cakes, stats }: Props) {
     const { can } = usePermission();
     const [search, setSearch] = useState('');
 
@@ -38,22 +44,16 @@ export default function Compositions({ cakes }: Props) {
         <>
             <Head title="Compositions" />
             <Container>
-                <div className="flex w-full items-center justify-between">
-                    <h1 className="text-2xl font-bold">Cake Recipes</h1>
-                </div>
+                <CompositionsStatsHeader stats={stats} />
 
-                <div className="flex">
-                    <Input
-                        placeholder="Search..."
-                        className="w-full"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                    />
-                </div>
+                <Input
+                    placeholder="Search..."
+                    className="w-full"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                />
 
-                <PaginationPage links={cakes.links} />
-
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:grid-cols-3 2xl:grid-cols-4">
                     {cakes.data.map((cake) => (
                         <div key={cake.id}>
                             <RecipeCard

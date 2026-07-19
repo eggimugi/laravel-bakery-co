@@ -1,5 +1,6 @@
-import { Form, Head } from '@inertiajs/react';
+import { Form, Head, Link } from '@inertiajs/react';
 import type { ReactNode } from 'react';
+import { toast } from 'sonner';
 import { Container } from '@/components/container';
 import { FormField } from '@/components/form/form-field';
 import { FormHeader } from '@/components/form/form-header';
@@ -7,20 +8,32 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
 import AppLayout from '@/layouts/app-layout';
+import { formatDate } from '@/lib/date';
 import { edit, index, update } from '@/routes/productions';
 import type { Production } from '@/types';
+import { ProductionStatsHeader } from './components/production-stats-header';
 
 type Props = {
     production: Production;
+    stats: {
+        totalProductions: number;
+        completed: number;
+        cancelled: number;
+    };
 };
 
-export default function EditProduction({ production }: Props) {
+export default function EditProduction({ production, stats }: Props) {
     return (
         <>
             <Head title={`Edit Production - ${production.cake?.cake_name}`} />
             <Container>
+                <ProductionStatsHeader stats={stats} />
+
                 <Form
                     {...update.form(production.id)}
+                    onSuccess={() =>
+                        toast.success('Production updated successfully.')
+                    }
                     className="mt-10 w-full rounded-xl border p-4"
                 >
                     {({ processing, errors }) => (
@@ -101,6 +114,13 @@ export default function EditProduction({ production }: Props) {
                                     )}
                                     Update Production
                                 </Button>
+
+                                <Link
+                                    href={index()}
+                                    className="text-sm text-muted-foreground hover:underline"
+                                >
+                                    Cancel
+                                </Link>
                             </div>
                         </>
                     )}
@@ -120,10 +140,10 @@ EditProduction.layout = function Layout({
     return (
         <AppLayout
             breadcrumbs={[
-                { title: 'Productions', href: index() },
+                { title: 'Production History', href: index() },
                 { title: 'Edit Production', href: edit(production.id) },
                 {
-                    title: production.cake?.cake_name,
+                    title: `${production.cake?.cake_name} - ${formatDate(production.production_date)}`,
                     href: edit(production.id),
                 },
             ]}

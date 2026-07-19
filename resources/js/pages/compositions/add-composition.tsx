@@ -1,5 +1,6 @@
 import { Head, Link } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
+import { toast } from 'sonner';
 import { Container } from '@/components/container';
 import { FormHeader } from '@/components/form/form-header';
 import { Button } from '@/components/ui/button';
@@ -8,14 +9,20 @@ import { Spinner } from '@/components/ui/spinner';
 import { useCreateComposition } from '@/hooks/Composition Row/use-create-composition';
 import { index as compositionsIndex, store } from '@/routes/compositions';
 import type { Material } from '@/types';
+import { CompositionsStatsHeader } from './components/composition-stats-header';
 import { CompositionRowField } from './components/row-field';
 
 type Props = {
     cake: { id: number; cake_name: string };
     materials: Material[];
+    stats: {
+        totalCakes: number;
+        compositions: number;
+        noCompositions: number;
+    };
 };
 
-export default function AddComposition({ cake, materials }: Props) {
+export default function AddComposition({ cake, materials, stats }: Props) {
     const {
         data,
         processing,
@@ -24,11 +31,17 @@ export default function AddComposition({ cake, materials }: Props) {
         addRow,
         removeRow,
         post,
+        reset,
     } = useCreateComposition(cake);
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(store.url());
+        post(store.url(), {
+            onSuccess: () => {
+                toast.success('Composition created successfully');
+                reset();
+            },
+        });
     };
 
     return (
@@ -43,6 +56,8 @@ export default function AddComposition({ cake, materials }: Props) {
                         />
                     ))}
                 </datalist>
+
+                <CompositionsStatsHeader stats={stats} />
 
                 <form
                     onSubmit={submit}

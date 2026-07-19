@@ -1,12 +1,13 @@
 import { router } from '@inertiajs/react';
 import { MoreHorizontal } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
     Card,
+    CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
@@ -23,7 +24,6 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { formatRupiah } from '@/lib/currency';
 import { destroy, edit, show } from '@/routes/productions';
 import type { Production } from '@/types';
 
@@ -43,10 +43,26 @@ export function ProductionCard({ production, canEdit, canRemove }: Props) {
     return (
         <>
             <Card className="w-full">
-                <div className="flex items-center justify-between px-6">
-                    <Badge variant="default" className="text-sm capitalize">
-                        Baked: {production.quantity}
-                    </Badge>
+                <CardHeader className="flex-row justify-between">
+                    <div className="flex gap-2">
+                        <Badge variant="default" className="text-sm capitalize">
+                            <span className="font-semibold">Baked: </span>
+                            {production.quantity}
+                        </Badge>
+
+                        <Badge
+                            variant={
+                                production.cancelled_at
+                                    ? 'default'
+                                    : 'secondary'
+                            }
+                            className="text-sm capitalize"
+                        >
+                            {production.cancelled_at
+                                ? 'Cancelled'
+                                : 'Completed'}
+                        </Badge>
+                    </div>
 
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -78,46 +94,32 @@ export function ProductionCard({ production, canEdit, canRemove }: Props) {
                             )}
                         </DropdownMenuContent>
                     </DropdownMenu>
-                </div>
-                <img
-                    src="/cake-placeholder.png"
-                    alt="Event cover"
-                    className="aspect-video w-full object-contain"
-                />
-                <CardHeader>
-                    <CardTitle className="flex items-center justify-between">
-                        <p>{production.cake.cake_name}</p>
-                        <Badge
-                        variant={
-                            production.cancelled_at ? 'default' : 'secondary'
-                        }
-                    >
-                        {production.cancelled_at ? 'Cancelled' : 'Completed'}
-                    </Badge>
-                    </CardTitle>
-                    <CardDescription className="flex items-center justify-between">
-                        <p>
-                            <span className="font-semibold capitalize">
-                                Flavour:
-                            </span>{' '}
-                            {production.cake.cake_flavour}
-                        </p>
-                        <p>
-                            <span className="font-semibold">Price:</span>{' '}
-                            {formatRupiah(production.cake.cake_price)}
-                        </p>
-                    </CardDescription>
                 </CardHeader>
-                <CardFooter>
-                    <Button
-                        className="w-full"
-                        onClick={() => {
-                            router.visit(show(production.id));
-                        }}
-                    >
-                        View Details
-                    </Button>
-                </CardFooter>
+                <CardContent className="flex gap-2">
+                    <img
+                        src="/cake-placeholder.png"
+                        alt="Event cover"
+                        className="aspect-video h-32 w-32 rounded-lg object-contain"
+                    />
+
+                    <div className='flex flex-col justify-between w-full'>
+                        <div>
+                            <CardTitle>{production.cake.cake_name}</CardTitle>
+                            <CardDescription className="flex items-center justify-between">
+                                <p>{production.cake.cake_flavour}</p>
+                            </CardDescription>
+                        </div>
+
+                        <Button
+                            className="w-full"
+                            onClick={() => {
+                                router.visit(show(production.cake.id));
+                            }}
+                        >
+                            View
+                        </Button>
+                    </div>
+                </CardContent>
             </Card>
 
             <Dialog open={showRemoveDialog} onOpenChange={setShowRemoveDialog}>
@@ -142,7 +144,12 @@ export function ProductionCard({ production, canEdit, canRemove }: Props) {
                             variant="destructive"
                             onClick={() => {
                                 router.delete(destroy(production.id).url, {
-                                    onSuccess: () => setShowRemoveDialog(false),
+                                    onSuccess: () => {
+                                        setShowRemoveDialog(false);
+                                        toast.success(
+                                            'Production cancelled successfully',
+                                        );
+                                    },
                                 });
                             }}
                         >

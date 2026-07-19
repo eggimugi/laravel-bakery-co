@@ -9,4 +9,6 @@ export type Cake = {
     cake_flavour: string;
     created_at: string;
     updated_at: string;
+
+    orders_count?: number;
 };

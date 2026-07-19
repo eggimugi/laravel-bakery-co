@@ -19,9 +19,12 @@ class MaterialController extends Controller
             'solid' => $materials->where('material_type', 'solid')->count(),
         ];
 
+        $lessStockMaterials = Material::where('stock', '<=', 3)->get();
+
         return Inertia::render('materials/index', [
             'materials' => $materials,
             'stats' => $stats,
+            'lessStockMaterials' => $lessStockMaterials,
         ]);
     }
 

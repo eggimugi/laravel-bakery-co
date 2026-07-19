@@ -1,5 +1,6 @@
 import { Form, Head } from '@inertiajs/react';
 import { Link } from '@inertiajs/react';
+import { toast } from 'sonner';
 import { Container } from '@/components/container';
 import { FormField } from '@/components/form/form-field';
 import { Button } from '@/components/ui/button';
@@ -29,7 +30,8 @@ export default function AddCake({ cakes }: Props) {
 
                 <Form
                     {...store.form()}
-                    resetOnSuccess={['password', 'password_confirmation']}
+                    onSuccess={() => toast.success('Cake created successfully.')}
+                    resetOnSuccess
                     disableWhileProcessing
                     className="w-full rounded-xl border p-4"
                 >

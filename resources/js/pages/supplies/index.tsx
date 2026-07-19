@@ -9,6 +9,7 @@ import { usePermission } from '@/hooks/use-permission';
 import { create, index } from '@/routes/supplies';
 import type { PaginationLinkType, Supply } from '@/types';
 import { SupplyCard } from './components/supply-card';
+import { SupplyStatsHeader } from './components/supply-stats-header';
 
 type PaginatedSupplies = {
     data: Supply[];
@@ -18,9 +19,14 @@ type PaginatedSupplies = {
 type Props = {
     supplies: PaginatedSupplies;
     filters?: { search?: string };
+    stats: {
+        totalSupplies: number;
+        completed: number;
+        cancelled: number;
+    };
 };
 
-export default function Supplies({ supplies }: Props) {
+export default function Supplies({ supplies, stats }: Props) {
     const { can } = usePermission();
     const [search, setSearch] = useState('');
 
@@ -40,13 +46,25 @@ export default function Supplies({ supplies }: Props) {
         <>
             <Head title="Supplies" />
             <Container>
-                <div className="flex w-full items-center justify-between">
-                    <div>
-                        <h1 className="text-2xl font-bold">Supplies</h1>
-                        <p className="text-muted-foreground">
-                            Manage your inventory of supplies.
-                        </p>
+                <SupplyStatsHeader stats={stats} />
+
+                <Input
+                    placeholder="Search..."
+                    className="w-full"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                />
+
+                <div className="flex items-center justify-between">
+                    <div className="space-x-4">
+                        <Button variant="outline" size="default">
+                            Newest
+                        </Button>
+                        <Button variant="default" size="default">
+                            Oldest
+                        </Button>
                     </div>
+
                     {can('supply.create') && (
                         <Button onClick={() => router.visit(create())}>
                             <PlusCircle className="mr-2 h-4 w-4" />
@@ -55,18 +73,7 @@ export default function Supplies({ supplies }: Props) {
                     )}
                 </div>
 
-                <div className="flex">
-                    <Input
-                        placeholder="Search..."
-                        className="w-full"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                    />
-                </div>
-
-                <PaginationPage links={supplies.links} />
-
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 2xl:grid-cols-4">
                     {supplies.data.map((supply) => (
                         <SupplyCard
                             key={supply.id}

@@ -1,6 +1,7 @@
 import { router } from '@inertiajs/react';
 import { MoreHorizontal } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -26,7 +27,11 @@ type ActionsCellProps = {
     canRemove: boolean;
 };
 
-export function ActionsCell({ supplier, canEdit, canRemove }: ActionsCellProps) {
+export function ActionsCell({
+    supplier,
+    canEdit,
+    canRemove,
+}: ActionsCellProps) {
     const [showRemoveDialog, setShowRemoveDialog] = useState(false);
 
     if (!canEdit && !canRemove) {
@@ -69,11 +74,12 @@ export function ActionsCell({ supplier, canEdit, canRemove }: ActionsCellProps) 
             <Dialog open={showRemoveDialog} onOpenChange={setShowRemoveDialog}>
                 <DialogContent>
                     <DialogTitle>
-                        Are you sure you want to remove {supplier.supplier_name}?
+                        Are you sure you want to remove {supplier.supplier_name}
+                        ?
                     </DialogTitle>
                     <DialogDescription>
-                        Once you remove this supplier, all of their resources and
-                        data will also be permanently deleted.
+                        Once you remove this supplier, all of their resources
+                        and data will also be permanently deleted.
                     </DialogDescription>
                     <DialogFooter className="gap-2">
                         <Button
@@ -86,7 +92,12 @@ export function ActionsCell({ supplier, canEdit, canRemove }: ActionsCellProps) 
                             variant="destructive"
                             onClick={() => {
                                 router.delete(destroy(supplier.id).url, {
-                                    onSuccess: () => setShowRemoveDialog(false),
+                                    onSuccess: () => {
+                                        setShowRemoveDialog(false);
+                                        toast.success(
+                                            'Supplier removed successfully',
+                                        );
+                                    },
                                 });
                             }}
                         >

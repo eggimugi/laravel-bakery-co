@@ -6,7 +6,7 @@ type Props = {
 
 export function CakeStatsHeader({ totalCakes }: Props) {
     return (
-        <div className="flex w-full items-center justify-between rounded-xl border p-6">
+        <div className="flex w-full flex-col justify-between gap-6 rounded-xl border p-6 sm:flex-row sm:items-center">
             <div>
                 <h1 className="text-2xl font-bold">BakeryCo. Cakes</h1>
                 <p className="text-muted-foreground">
@@ -18,6 +18,7 @@ export function CakeStatsHeader({ totalCakes }: Props) {
                     title="Total Cakes"
                     value={totalCakes}
                     unitValue="cakes"
+                    className="items-start sm:items-end"
                 />
             </div>
         </div>

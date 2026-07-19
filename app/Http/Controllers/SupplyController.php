@@ -27,8 +27,16 @@ class SupplyController extends Controller
             ->paginate(8)
             ->withQueryString();
 
+        $stats = [
+            'totalSupplies' => Supply::count(),
+            'completed' => Supply::whereNotNull('cancelled_at')->count(),
+            'cancelled' => Supply::whereNull('cancelled_at')->count(),
+        ];
+
         return Inertia::render('supplies/index', [
             'supplies' => $supplies,
+            'filters' => $request->only(['search']),
+            'stats' => $stats,
         ]);
     }
 
@@ -39,10 +47,16 @@ class SupplyController extends Controller
     {
         $suppliers = Supplier::select('id', 'supplier_name')->get();
         $materials = Material::select('id', 'material_name')->get();
+        $stats = [
+            'totalSupplies' => Supply::count(),
+            'completed' => Supply::whereNotNull('cancelled_at')->count(),
+            'cancelled' => Supply::whereNull('cancelled_at')->count(),
+        ];
 
         return Inertia::render('supplies/add-supply', [
             'suppliers' => $suppliers,
             'materials' => $materials,
+            'stats' => $stats,
         ]);
     }
 
@@ -79,11 +93,17 @@ class SupplyController extends Controller
         $supply->load(['user', 'supplier', 'detailSupplies.material']);
         $suppliers = Supplier::select('id', 'supplier_name')->get();
         $materials = Material::select('id', 'material_name')->get();
+        $stats = [
+            'totalSupplies' => Supply::count(),
+            'completed' => Supply::whereNotNull('cancelled_at')->count(),
+            'cancelled' => Supply::whereNull('cancelled_at')->count(),
+        ];
 
         return Inertia::render('supplies/edit-supply', [
             'supply' => $supply,
             'suppliers' => $suppliers,
             'materials' => $materials,
+            'stats' => $stats,
         ]);
     }
 

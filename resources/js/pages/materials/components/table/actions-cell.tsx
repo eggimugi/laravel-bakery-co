@@ -1,6 +1,7 @@
 import { router } from '@inertiajs/react';
 import { MoreHorizontal } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -86,7 +87,14 @@ export function ActionsCell({ material, canEdit, canRemove }: ActionsCellProps) 
                             variant="destructive"
                             onClick={() => {
                                 router.delete(destroy(material.id).url, {
-                                    onSuccess: () => setShowRemoveDialog(false),
+                                    onSuccess: () => {
+                                        setShowRemoveDialog(false)
+                                        toast.success('Material removed successfully.');
+                                    },
+
+                                    onError: () => {
+                                        toast.error('Failed to remove material.');
+                                    }
                                 });
                             }}
                         >

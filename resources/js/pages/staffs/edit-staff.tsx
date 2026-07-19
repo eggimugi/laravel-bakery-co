@@ -1,4 +1,5 @@
 import { Form, Head } from '@inertiajs/react';
+import { toast } from 'sonner';
 import { Container } from '@/components/container';
 import InputError from '@/components/form/input-error';
 import { Button } from '@/components/ui/button';
@@ -35,6 +36,11 @@ export default function EditStaff({ staff, stats }: Props) {
 
                 <Form
                     {...update.form(staff.id)}
+                    onSuccess={() => {
+                        toast.success('Staff updated successfully.');
+                    }}
+                    resetOnSuccess
+                    disableWhileProcessing
                     className="mt-10 w-full rounded-xl border p-4"
                 >
                     {({ processing, errors }) => (

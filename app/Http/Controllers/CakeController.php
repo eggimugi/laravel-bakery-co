@@ -10,9 +10,11 @@ class CakeController extends Controller
     public function index()
     {
         $cakes = Cake::all();
+        $lessStockCakes = Cake::where('stock', '<=', 3)->get();
 
         return Inertia::render('cakes/index', [
             'cakes' => $cakes,
+            'lessStockCakes' => $lessStockCakes,
         ]);
     }
 
@@ -38,7 +40,7 @@ class CakeController extends Controller
 
         $cake = Cake::create($validated);
 
-        return redirect()->route('cakes.create')->with('success', 'Cake created successfully.');
+        return redirect()->route('cakes.create');
     }
 
     public function edit(Cake $cake)
@@ -64,7 +66,7 @@ class CakeController extends Controller
 
         $cake->update($validated);
 
-        return redirect()->route('cakes.index')->with('success', 'Cake updated successfully.');
+        return redirect()->route('cakes.index');
     }
 
     public function destroy(Cake $cake)

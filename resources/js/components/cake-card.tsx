@@ -15,15 +15,21 @@ type Props = {
 
 export function CakeCard({ cake }: Props) {
     return (
-        <Card className='gap-4'>
-            <CardHeader className='gap-4'>
-                <Badge variant="secondary" className="text-sm">
-                    Available: {cake.stock}
-                </Badge>
+        <Card className="gap-4">
+            <CardHeader className="gap-4">
+                <div className="flex items-center justify-between">
+                    <Badge variant="secondary" className="text-sm">
+                        Available: {cake.stock}
+                    </Badge>
+
+                    <Badge className="capitalize">
+                        {cake.orders_count} Orders
+                    </Badge>
+                </div>
                 <img
                     src={'/croissant.jpg'}
                     alt={cake.cake_name}
-                    className="h-48 w-full rounded-lg object-cover"
+                    className="aspect-video h-44 w-full rounded-lg object-cover"
                 />
             </CardHeader>
 

@@ -6,7 +6,7 @@ type Props = {
 
 export function SupplierStatsHeader({ totalSuppliers }: Props) {
     return (
-        <div className="flex w-full items-center justify-between rounded-xl border p-6">
+        <div className="flex w-full flex-col justify-between gap-6 rounded-xl border p-6 md:flex-row md:items-center">
             <div>
                 <h1 className="text-2xl font-bold">
                     Manage BakeryCo. Suppliers
@@ -17,10 +17,10 @@ export function SupplierStatsHeader({ totalSuppliers }: Props) {
             </div>
             <div className="grid grid-cols-1">
                 <StatsCard
-                    title="Total Suppliers"
+                    title="Suppliers"
                     value={totalSuppliers}
                     unitValue="accounts"
-                    className='border-none '
+                    className="items-start sm:items-end"
                 />
             </div>
         </div>

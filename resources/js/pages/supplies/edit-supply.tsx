@@ -1,6 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
 import type { ReactNode } from 'react';
+import { toast } from 'sonner';
 import { Container } from '@/components/container';
 import { FormField } from '@/components/form/form-field';
 import { FormHeader } from '@/components/form/form-header';
@@ -16,14 +17,20 @@ import { formatDate } from '@/lib/date';
 import { edit, index, update } from '@/routes/supplies';
 import type { Supply } from '@/types';
 import { SupplyRowField } from './components/supply-row-field';
+import { SupplyStatsHeader } from './components/supply-stats-header';
 
 type Props = {
     supply: Supply;
     suppliers: { id: number; supplier_name: string }[];
     materials: { id: number; material_name: string }[];
+    stats: {
+        totalSupplies: number;
+        completed: number;
+        cancelled: number;
+    };
 };
 
-export default function EditSupply({ supply, suppliers, materials }: Props) {
+export default function EditSupply({ supply, suppliers, materials, stats }: Props) {
     const {
         data,
         setData,
@@ -33,11 +40,17 @@ export default function EditSupply({ supply, suppliers, materials }: Props) {
         addRow,
         removeRow,
         put,
+        reset
     } = useEditSupply(supply);
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        put(update.url(supply.id));
+        put(update.url(supply.id), {
+            onSuccess: () => {
+                toast.success('Supply updated successfully');
+                reset()
+            }
+        });
     };
 
     return (
@@ -46,6 +59,8 @@ export default function EditSupply({ supply, suppliers, materials }: Props) {
                 title={`Edit Detail Supply - ${supply.supplier.supplier_name}`}
             />
             <Container>
+                <SupplyStatsHeader stats={stats} />
+
                 <div className="grid grid-cols-3 rounded-xl border p-4">
                     <div className="flex flex-col gap-8">
                         <div>

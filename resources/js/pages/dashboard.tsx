@@ -10,6 +10,8 @@ import {
 import { CakeCard } from '@/components/cake-card';
 import { Container } from '@/components/container';
 import { QuickActionCard } from '@/components/quick-action-card';
+import StaffCard from '@/components/staff-card';
+import { formatStockMovementType } from '@/lib/stock-movement-type';
 import { dashboard } from '@/routes';
 import { index as cakes } from '@/routes/cakes';
 import { index as materials } from '@/routes/materials';
@@ -17,18 +19,29 @@ import { create as orders } from '@/routes/orders';
 import { create as productions } from '@/routes/productions';
 import { index as staffs } from '@/routes/staffs';
 import { create as supplies } from '@/routes/supplies';
-import type { Cake } from '@/types';
+import type { Cake, User } from '@/types';
+import { CakeTable } from './cakes/components/table/page';
 
 type Props = {
     popularCakes: Cake[];
+    topStaff: User[];
+    stockMovements: any[];
+    allCakes: Cake[];
 };
 
-export default function Dashboard({ popularCakes }: Props) {
+export default function Dashboard({
+    popularCakes,
+    topStaff,
+    stockMovements,
+    allCakes,
+}: Props) {
+    console.log(stockMovements);
+
     return (
         <>
             <Head title="Dashboard" />
-            <Container className='justify-between'>
-                <div className="relative flex justify-between overflow-hidden rounded-2xl border p-6 before:absolute before:inset-0 before:bg-hero before:bg-size-[25%_auto] before:bg-right before:bg-no-repeat before:invert-0 before:content-[''] before:dark:invert">
+            <Container>
+                <div className="hero-bg rounded-xl border p-6">
                     <div className="space-y-6">
                         <div>
                             <h1 className="text-4xl font-bold">BakeryCo.</h1>
@@ -52,9 +65,9 @@ export default function Dashboard({ popularCakes }: Props) {
                     </div>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-6">
                     <h2 className="text-lg font-medium">Quick Actions</h2>
-                    <div className="grid grid-cols-6 gap-6">
+                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
                         <QuickActionCard
                             icon={<Users />}
                             title="Manage Staffs"
@@ -94,15 +107,80 @@ export default function Dashboard({ popularCakes }: Props) {
                     </div>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-6">
                     <h2 className="text-lg font-medium">Popular Cakes</h2>
-                    <div className="grid grid-cols-5 gap-6">
+                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6">
                         {popularCakes.map((cake) => (
                             <CakeCard key={cake.id} cake={cake} />
                         ))}
                     </div>
                 </div>
 
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
+                    <div className="col-span-2 space-y-6 xl:col-span-3">
+                        <h2 className="text-lg font-medium">
+                            Shout Out to BakeryCo. Staff
+                        </h2>
+
+                        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 2xl:grid-cols-4">
+                            {topStaff.map((staff) => (
+                                <StaffCard key={staff.id} staff={staff} />
+                            ))}
+                        </div>
+
+                        <h2 className="text-lg font-medium">Manage Stock</h2>
+
+                        <CakeTable cakes={allCakes} />
+                    </div>
+
+                    <div className="col-span-2 flex h-full flex-col gap-6 xl:col-span-1">
+                        <h2 className="text-lg font-medium">Stock Movements</h2>
+
+                        <div className="flex flex-1 flex-col justify-between rounded-xl border p-6">
+                            {stockMovements.length === 0 && (
+                                <p className="text-sm text-muted-foreground">
+                                    No stock movements yet.
+                                </p>
+                            )}
+
+                            {stockMovements.map((movement) => (
+                                <div
+                                    key={movement.id}
+                                    className="flex justify-between border-b last:border-0"
+                                >
+                                    <div>
+                                        <p className="font-medium">
+                                            {formatStockMovementType(
+                                                movement.type,
+                                            ) ?? '-'}
+                                        </p>
+                                        <p className="text-sm text-muted-foreground">
+                                            Done by : {movement.user?.name}
+                                        </p>
+                                    </div>
+
+                                    <div className="text-right">
+                                        <p className="font-medium">
+                                            {movement.stockable_type
+                                                ?.split('\\')
+                                                .pop()}
+                                        </p>
+                                        <span
+                                            className={
+                                                movement.quantity > 0
+                                                    ? 'font-medium text-green-600'
+                                                    : 'font-medium text-red-600'
+                                            }
+                                        >
+                                            {movement.quantity > 0 ? '+' : ''}
+                                            {movement.quantity}
+                                        </span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
             </Container>
         </>
     );

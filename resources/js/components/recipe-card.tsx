@@ -1,6 +1,7 @@
 import { router } from '@inertiajs/react';
 import { MoreHorizontal, Plus } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import {
     Dialog,
     DialogContent,
@@ -14,15 +15,14 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { formatRupiah } from '@/lib/currency';
 import { create, destroy, edit, show } from '@/routes/compositions';
 import type { CakeWithCompositions } from '@/types';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import {
     Card,
+    CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from './ui/card';
@@ -45,7 +45,7 @@ export function RecipeCard({ cake, canAdd, canEdit, canRemove }: Props) {
     return (
         <>
             <Card className="w-full">
-                <div className="flex items-center justify-between px-6">
+                <CardHeader className="flex-row justify-between">
                     <Badge variant={hasCompositions ? 'default' : 'secondary'}>
                         {hasCompositions ? 'Compositions' : 'No Compositions'}
                     </Badge>
@@ -97,37 +97,33 @@ export function RecipeCard({ cake, canAdd, canEdit, canRemove }: Props) {
                             )}
                         </DropdownMenuContent>
                     </DropdownMenu>
-                </div>
-                <img
-                    src="/cake-placeholder.png"
-                    alt="Event cover"
-                    className="aspect-video w-full object-contain"
-                />
-                <CardHeader>
-                    <CardTitle>{cake.cake_name}</CardTitle>
-                    <CardDescription className="flex items-center justify-between">
-                        <p>
-                            <span className="font-semibold capitalize">
-                                Flavour:
-                            </span>{' '}
-                            {cake.cake_flavour}
-                        </p>
-                        <p>
-                            <span className="font-semibold">Price:</span>{' '}
-                            {formatRupiah(cake.cake_price)}
-                        </p>
-                    </CardDescription>
                 </CardHeader>
-                <CardFooter>
-                    <Button
-                        className="w-full"
-                        onClick={() => {
-                            router.visit(show(cake.id));
-                        }}
-                    >
-                        View Compositions
-                    </Button>
-                </CardFooter>
+
+                <CardContent className="flex gap-2">
+                    <img
+                        src="/cake-placeholder.png"
+                        alt="Event cover"
+                        className="aspect-video h-32 w-32 rounded-lg object-contain"
+                    />
+
+                    <div className='flex flex-col justify-between w-full'>
+                        <div>
+                            <CardTitle>{cake.cake_name}</CardTitle>
+                            <CardDescription className="flex items-center justify-between">
+                                <p>{cake.cake_flavour}</p>
+                            </CardDescription>
+                        </div>
+
+                        <Button
+                            className="w-full"
+                            onClick={() => {
+                                router.visit(show(cake.id));
+                            }}
+                        >
+                            View
+                        </Button>
+                    </div>
+                </CardContent>
             </Card>
 
             <Dialog open={showRemoveDialog} onOpenChange={setShowRemoveDialog}>
@@ -151,11 +147,16 @@ export function RecipeCard({ cake, canAdd, canEdit, canRemove }: Props) {
                             variant="destructive"
                             onClick={() => {
                                 router.delete(destroy(cake.id).url, {
-                                    onSuccess: () => setShowRemoveDialog(false),
+                                    onSuccess: () => {
+                                        setShowRemoveDialog(false);
+                                        toast.success(
+                                            'Composition deleted successfully',
+                                        );
+                                    },
                                 });
                             }}
                         >
-                            Remove Cake
+                            Remove Composition
                         </Button>
                     </DialogFooter>
                 </DialogContent>

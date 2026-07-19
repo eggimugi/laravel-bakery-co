@@ -1,6 +1,7 @@
 import { router } from '@inertiajs/react';
 import { MoreHorizontal } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -86,7 +87,16 @@ export function ActionsCell({ cake, canEdit, canRemove }: ActionsCellProps) {
                             variant="destructive"
                             onClick={() => {
                                 router.delete(destroy(cake.id).url, {
-                                    onSuccess: () => setShowRemoveDialog(false),
+                                    onSuccess: () => {
+                                        setShowRemoveDialog(false);
+                                        toast.success(
+                                            `${cake.cake_name} removed successfully.`,
+                                        );
+                                    },
+
+                                    onError: () => {
+                                        toast.error('Failed to remove cake.');
+                                    },
                                 });
                             }}
                         >

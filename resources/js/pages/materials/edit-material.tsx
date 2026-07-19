@@ -1,4 +1,5 @@
 import { Form, Head } from '@inertiajs/react';
+import { toast } from 'sonner';
 import { Container } from '@/components/container';
 import InputError from '@/components/form/input-error';
 import { Button } from '@/components/ui/button';
@@ -35,6 +36,9 @@ export default function EditMaterial({ material, stats }: Props) {
 
                 <Form
                     {...update.form(material.id)}
+                    onSuccess={() =>
+                        toast.success('Material updated successfully!')
+                    }
                     className="mt-10 w-full rounded-xl border p-4"
                 >
                     {({ processing, errors }) => (

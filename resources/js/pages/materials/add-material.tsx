@@ -1,5 +1,6 @@
 import { Form, Head } from '@inertiajs/react';
 import { Link } from '@inertiajs/react';
+import { toast } from 'sonner';
 import { Container } from '@/components/container';
 import InputError from '@/components/form/input-error';
 import { Button } from '@/components/ui/button';
@@ -34,6 +35,7 @@ export default function AddMaterial({ stats }: Props) {
 
                 <Form
                     {...store.form()}
+                    onSuccess={() => toast.success('Material created successfully!')}
                     resetOnSuccess
                     disableWhileProcessing
                     className="w-full rounded-xl border p-4"

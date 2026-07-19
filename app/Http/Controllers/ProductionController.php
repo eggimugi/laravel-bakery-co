@@ -25,20 +25,36 @@ class ProductionController extends Controller
             ->paginate(8)
             ->withQueryString();
 
+        $stats = [
+            'totalProductions' => Production::count(),
+            'completed' => Production::whereNotNull('cancelled_at')->count(),
+            'cancelled' => Production::whereNull('cancelled_at')->count(),
+        ];
+
         return inertia('productions/production-history', [
             'productions' => $productions,
+            'stats' => $stats,
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
         $cakes = Cake::select('id', 'cake_name')->get();
+        $selectedCakeId = $request->integer('cake_id') ?: null;
+
+        $stats = [
+            'totalProductions' => Production::count(),
+            'completed' => Production::whereNotNull('cancelled_at')->count(),
+            'cancelled' => Production::whereNull('cancelled_at')->count(),
+        ];
 
         return inertia('productions/add-production', [
             'cakes' => $cakes,
+            'selectedCakeId' => $selectedCakeId,
+            'stats' => $stats,
         ]);
     }
 
@@ -73,9 +89,15 @@ class ProductionController extends Controller
     public function edit(Production $production)
     {
         $production->load(['user', 'cake']);
+        $stats = [
+            'totalProductions' => Production::count(),
+            'completed' => Production::whereNotNull('cancelled_at')->count(),
+            'cancelled' => Production::whereNull('cancelled_at')->count(),
+        ];
 
         return inertia('productions/edit-production', [
             'production' => $production,
+            'stats' => $stats,
         ]);
     }
 

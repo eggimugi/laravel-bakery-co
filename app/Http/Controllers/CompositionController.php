@@ -23,27 +23,47 @@ class CompositionController extends Controller
             ->paginate(8)
             ->withQueryString();
 
+        $stats = [
+            'totalCakes' => Cake::count(),
+            'compositions' => Composition::count(),
+            'noCompositions' => Cake::doesntHave('compositions')->count(),
+        ];
+
         return Inertia::render('compositions/index', [
             'cakes' => $cakes,
+            'stats' => $stats,
         ]);
     }
 
     public function show(Cake $cake)
     {
+        $cake = $cake->load(['compositions.material']);
+
+        $stats = [
+            'totalCakes' => Cake::count(),
+            'compositions' => Composition::count(),
+            'noCompositions' => Cake::doesntHave('compositions')->count(),
+        ];
+
         return Inertia::render('compositions/show-composition', [
-            'cake' => $cake->load([
-                'compositions.material',
-            ]),
+            'cake' => $cake,
+            'stats' => $stats,
         ]);
     }
 
     public function create(Cake $cake)
     {
         $materials = Material::select('id', 'material_name')->get();
+        $stats = [
+            'totalCakes' => Cake::count(),
+            'compositions' => Composition::count(),
+            'noCompositions' => Cake::doesntHave('compositions')->count(),
+        ];
 
         return Inertia::render('compositions/add-composition', [
             'cake' => $cake,
             'materials' => $materials,
+            'stats' => $stats,
         ]);
     }
 
@@ -68,16 +88,22 @@ class CompositionController extends Controller
     {
         $cake = $cake->load(['compositions.material']);
         $materials = Material::select('id', 'material_name')->get();
+        $stats = [
+            'totalCakes' => Cake::count(),
+            'compositions' => Composition::count(),
+            'noCompositions' => Cake::doesntHave('compositions')->count(),
+        ];
 
         return Inertia::render('compositions/edit-composition', [
             'cake' => $cake,
             'materials' => $materials,
+            'stats' => $stats,
         ]);
     }
 
     public function update(UpdateRequest $request, Cake $cake)
     {
-        $validated = $request->validate();
+        $validated = $request->validated();
 
         DB::transaction(function () use ($validated, $cake) {
             $submittedIds = collect($validated['materials'])->pluck('id')->filter()->toArray();
@@ -105,7 +131,7 @@ class CompositionController extends Controller
             }
         });
 
-        return redirect()->route('compositions.index')->with('success', 'Composition updated successfully.');
+        return redirect()->route('compositions.show', $cake)->with('success', 'Composition updated successfully.');
     }
 
     public function destroy(Cake $cake)

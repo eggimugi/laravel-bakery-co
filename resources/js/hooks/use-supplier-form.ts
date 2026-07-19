@@ -1,5 +1,6 @@
 import { useForm } from '@inertiajs/react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { validatePhone } from '@/lib/validate-phone';
 import { store, update } from '@/routes/suppliers';
 
@@ -69,6 +70,7 @@ export function useSupplierForm(
 
         const submitOptions = {
             onSuccess: () => {
+                toast.success('Supplier saved successfully');
                 reset();
                 setTouched({});
             },

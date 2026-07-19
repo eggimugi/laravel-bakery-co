@@ -1,5 +1,6 @@
 import { Head, Link } from '@inertiajs/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { Container } from '@/components/container';
 import { FormField } from '@/components/form/form-field';
 import { FormHeader } from '@/components/form/form-header';
@@ -8,19 +9,52 @@ import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
 import { useAddProduction } from '@/hooks/use-add-production';
 import { create, index, store } from '@/routes/productions';
+import { ProductionStatsHeader } from './components/production-stats-header';
 
 type Props = {
     cakes: { id: number; cake_name: string }[];
+    selectedCakeId?: number | null;
+    stats: {
+        totalProductions: number;
+        completed: number;
+        cancelled: number;
+    };
 };
 
-export default function AddProduction({ cakes }: Props) {
-    const { data, setData, post, processing, errors, findCakeByName } =
+export default function AddProduction({ cakes, selectedCakeId, stats }: Props) {
+    const { data, setData, post, processing, errors, findCakeByName, reset } =
         useAddProduction(cakes);
-    const [cakeNameInput, setCakeNameInput] = useState('');
+
+    const preselectedCake = selectedCakeId
+        ? cakes.find((cake) => cake.id === selectedCakeId)
+        : undefined;
+
+    const [cakeNameInput, setCakeNameInput] = useState(
+        preselectedCake?.cake_name ?? '',
+    );
+
+    const [date, setDate] = useState(() => {
+        const today = new Date();
+
+        return today.toISOString().split('T')[0];
+    });
+
+    // sync ke form data begitu komponen mount
+    useEffect(() => {
+        if (preselectedCake) {
+            setData('cake_id', preselectedCake.id);
+            setData('production_date', date);
+        }
+    });
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(store.url());
+        post(store.url(), {
+            onSuccess: () => {
+                toast.success('Production created successfully.');
+                reset();
+            },
+        });
     };
 
     return (
@@ -32,6 +66,8 @@ export default function AddProduction({ cakes }: Props) {
                         <option key={cake.id} value={cake.cake_name} />
                     ))}
                 </datalist>
+
+                <ProductionStatsHeader stats={stats} />
 
                 <form
                     onSubmit={submit}
@@ -107,9 +143,10 @@ export default function AddProduction({ cakes }: Props) {
                                 tabIndex={3}
                                 placeholder="Production date"
                                 value={data.production_date}
-                                onChange={(e) =>
-                                    setData('production_date', e.target.value)
-                                }
+                                onChange={(e) => {
+                                    setDate(e.target.value);
+                                    setData('production_date', e.target.value);
+                                }}
                             />
                         </FormField>
 

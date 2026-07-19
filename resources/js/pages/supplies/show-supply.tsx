@@ -1,5 +1,6 @@
 import { Head, router } from '@inertiajs/react';
 import type { ReactNode } from 'react';
+import { toast } from 'sonner';
 import { Container } from '@/components/container';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -52,7 +53,12 @@ export default function ShowSupply({ supply }: Props) {
                             </Button>
                             <Button
                                 onClick={() =>
-                                    router.delete(destroy(supply.id))
+                                    router.delete(destroy(supply.id), {
+                                        onSuccess: () => {
+                                            toast.success('Supply cancelled successfully'
+                                            );
+                                        }
+                                    })
                                 }
                             >
                                 Cancel Supply

@@ -1,4 +1,4 @@
-import { StatsCard } from "@/components/stats-card";
+import { StatsCard } from '@/components/stats-card';
 
 type Props = {
     stats: {
@@ -11,18 +11,19 @@ type Props = {
 
 export function StaffStatsHeader({ stats }: Props) {
     return (
-        <div className="flex w-full items-center justify-between rounded-xl border p-6">
+        <div className="flex w-full flex-col justify-between gap-6 rounded-xl border p-6 lg:flex-row lg:items-center">
             <div>
                 <h1 className="text-2xl font-bold">Manage BakeryCo. Staff</h1>
                 <p className="text-muted-foreground">
                     Manage your bakery staff members and their details.
                 </p>
             </div>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
+            <div className="grid grid-cols-2 gap-6 xl:grid-cols-4">
                 <StatsCard
                     title="Total Staffs"
                     value={stats.totalStaffs}
                     unitValue="accounts"
+                    className="items-start lg:items-end"
                 />
                 <StatsCard
                     title="Owners"
@@ -33,6 +34,7 @@ export function StaffStatsHeader({ stats }: Props) {
                     title="Managers"
                     value={stats.totalManagers}
                     unitValue="accounts"
+                    className="items-start lg:items-end"
                 />
                 <StatsCard
                     title="Cashiers"

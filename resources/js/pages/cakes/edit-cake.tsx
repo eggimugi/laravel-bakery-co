@@ -1,5 +1,7 @@
 import { Form, Head } from '@inertiajs/react';
+import { toast } from 'sonner';
 import { Container } from '@/components/container';
+import InputError from '@/components/form/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -14,7 +16,6 @@ import { Spinner } from '@/components/ui/spinner';
 import { update } from '@/routes/cakes';
 import type { Cake } from '@/types';
 import { CakeStatsHeader } from './components/cake-stats-header';
-import InputError from '@/components/form/input-error';
 
 type Props = {
     cake: Cake;
@@ -30,6 +31,7 @@ export default function EditCake({ cake, totalCakes }: Props) {
 
                 <Form
                     {...update.form(cake.id)}
+                    onSuccess={() => toast.success('Cake updated successfully.')}
                     className="mt-10 w-full rounded-xl border p-4"
                 >
                     {({ processing, errors }) => (

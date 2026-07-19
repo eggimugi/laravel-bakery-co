@@ -1,5 +1,6 @@
 import { router } from '@inertiajs/react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -107,9 +108,17 @@ export function OrderCard({ order, canManageOrder }: Props) {
                         <Button
                             disabled={
                                 order.status === 'completed' ||
-                                order.status === 'cancelled'
+                                order.status === 'canceled'
                             }
-                            onClick={() => router.put(update(order.id))}
+                            onClick={() => {
+                                router.put(update(order.id).url, {
+                                    status: 'completed',
+                                }, {
+                                    onSuccess: () => {
+                                        toast.success(`Order ${order.id} has been completed successfully.`);
+                                    }
+                                });
+                            }}
                             variant={order.status === 'completed' ? 'secondary' : 'default'}
                         >
                             Finish Order
@@ -120,7 +129,7 @@ export function OrderCard({ order, canManageOrder }: Props) {
                         <Button
                             disabled={
                                 order.status === 'completed' ||
-                                order.status === 'cancelled'
+                                order.status === 'canceled'
                             }
                             variant="secondary"
                             onClick={() => setShowRemoveDialog(true)}
@@ -151,7 +160,10 @@ export function OrderCard({ order, canManageOrder }: Props) {
                             variant="destructive"
                             onClick={() => {
                                 router.delete(destroy(order.id).url, {
-                                    onSuccess: () => setShowRemoveDialog(false),
+                                    onSuccess: () => {
+                                        setShowRemoveDialog(false)
+                                        toast.success(`Order ${order.id} has been cancelled successfully.`);
+                                    }
                                 });
                             }}
                         >

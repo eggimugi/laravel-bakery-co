@@ -1,3 +1,4 @@
+import { router } from '@inertiajs/react';
 import {
     Users,
     CakeSlice,
@@ -18,8 +19,8 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
-    useSidebar,
 } from '@/components/ui/sidebar';
+import { dashboard } from '@/routes';
 import type { NavGroup } from '@/types';
 import AppLogo from './app-logo';
 
@@ -170,7 +171,6 @@ const mainNavGroups: NavGroup[] = [
 ];
 
 export function AppSidebar() {
-    const { toggleSidebar } = useSidebar();
 
     return (
         <Sidebar collapsible="icon" variant="inset">
@@ -179,7 +179,7 @@ export function AppSidebar() {
                     <SidebarMenuItem>
                         <SidebarMenuButton
                             size="lg"
-                            onClick={toggleSidebar}
+                            onClick={() => router.visit(dashboard())}
                         >
                             <AppLogo />
                         </SidebarMenuButton>

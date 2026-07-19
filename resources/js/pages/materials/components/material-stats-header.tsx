@@ -11,7 +11,7 @@ type Props = {
 
 export function MaterialStatsHeader({ stats }: Props) {
     return (
-        <div className="flex w-full items-center justify-between rounded-xl border p-6">
+        <div className="flex w-full flex-col justify-between gap-6 rounded-xl border p-6 lg:flex-row lg:items-center">
             <div>
                 <h1 className="text-2xl font-bold">
                     Manage BakeryCo. Materials
@@ -20,11 +20,12 @@ export function MaterialStatsHeader({ stats }: Props) {
                     Manage your bakery materials and their details.
                 </p>
             </div>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
+            <div className="grid grid-cols-2 gap-6 xl:grid-cols-4">
                 <StatsCard
                     title="Total Materials"
                     value={stats.totalMaterials}
                     unitValue="materials"
+                    className="items-start lg:items-end"
                 />
                 <StatsCard
                     title="Liquid"
@@ -35,6 +36,7 @@ export function MaterialStatsHeader({ stats }: Props) {
                     title="Powder"
                     value={stats.powder}
                     unitValue="materials"
+                    className="items-start lg:items-end"
                 />
                 <StatsCard
                     title="Solid"
