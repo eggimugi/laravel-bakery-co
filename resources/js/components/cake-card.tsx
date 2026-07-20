@@ -34,10 +34,10 @@ export function CakeCard({ cake }: Props) {
             </CardHeader>
 
             <CardContent>
-                <CardTitle>{cake.cake_name}</CardTitle>
+                <CardTitle className='capitalize'>{cake.cake_name}</CardTitle>
                 <CardDescription>
                     <div className="flex items-center justify-between">
-                        <p>{cake.cake_flavour}</p>
+                        <p className='capitalize'>{cake.cake_flavour}</p>
 
                         <p className="font-semibold">
                             {formatRupiah(cake.cake_price)}

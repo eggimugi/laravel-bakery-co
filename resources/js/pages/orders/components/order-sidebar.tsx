@@ -87,7 +87,7 @@ export function OrderSidebar({
                                 <Card key={cake.id} className="border-muted">
                                     <CardContent className="space-y-3 p-3">
                                         <div className="flex items-start justify-between gap-3">
-                                            <div className="min-w-0">
+                                            <div className="min-w-0 capitalize">
                                                 <p className="truncate font-medium">
                                                     {cake.cake_name}
                                                 </p>

@@ -55,8 +55,8 @@ export default function ProductionHistory({ productions, stats }: Props) {
                     onChange={(e) => setSearch(e.target.value)}
                 />
 
-                <div className="flex items-center justify-between">
-                    <div className="space-x-4">
+                <div className="flex flex-col lg:flex-row items-start lg:items-center lg:justify-between gap-6">
+                    <div className="space-x-4 space-y-4 md:space-y-0">
                         <Button variant="outline" size="default">
                             Newest
                         </Button>

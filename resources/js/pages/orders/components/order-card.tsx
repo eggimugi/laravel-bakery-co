@@ -20,7 +20,7 @@ import { Separator } from '@/components/ui/separator';
 import { formatRupiah } from '@/lib/currency';
 import { formatDate } from '@/lib/date';
 import { formatTime } from '@/lib/time';
-import { destroy, show, update } from '@/routes/orders';
+import { destroy, update } from '@/routes/orders';
 import type { Order } from '@/types';
 
 type Props = {
@@ -43,7 +43,7 @@ export function OrderCard({ order, canManageOrder }: Props) {
 
     return (
         <>
-            <Card className="w-full">
+            <Card className="flex h-full w-full flex-col">
                 <CardHeader className="">
                     <div className="flex items-start justify-between">
                         <div className="">
@@ -64,25 +64,21 @@ export function OrderCard({ order, canManageOrder }: Props) {
                     </div>
                 </CardHeader>
                 <Separator />
-                <CardContent>
-                    <div className="flex items-center justify-between text-muted-foreground">
-                        <p className="font-semibold">Cake Name</p>
-                        <p className="font-semibold">Quantity</p>
-                        <p className="font-semibold">Subtotal</p>
+                <CardContent className="flex-1">
+                    <div className="grid grid-cols-3 text-muted-foreground">
+                        <p className="font-semibold">Cake</p>
+                        <p className="text-center font-semibold">Qty</p>
+                        <p className="text-right font-semibold">Subtotal</p>
                     </div>
+
                     {order.detail_orders.map((detailOrder) => (
                         <div
                             key={detailOrder.id}
-                            className="flex items-center justify-between"
+                            className="grid grid-cols-3 items-center capitalize"
                         >
                             <p>{detailOrder.cake.cake_name}</p>
-                            <p className="flex items-center gap-1">
-                                {detailOrder.quantity}{' '}
-                                <span className="text-sm text-muted-foreground capitalize">
-                                    {detailOrder.cake.unit}
-                                </span>
-                            </p>
-                            <p>
+                            <p className="text-center">{detailOrder.quantity}</p>
+                            <p className="text-right">
                                 {formatRupiah(
                                     detailOrder.cake.cake_price *
                                         detailOrder.quantity,
@@ -103,28 +99,35 @@ export function OrderCard({ order, canManageOrder }: Props) {
 
                 <Separator />
 
-                <CardFooter>
-                    <div className="flex w-full items-center justify-between">
+                <CardFooter className='flex-col sm:flex-row w-full justify-between gap-4'>
                         <Button
                             disabled={
                                 order.status === 'completed' ||
                                 order.status === 'canceled'
                             }
                             onClick={() => {
-                                router.put(update(order.id).url, {
-                                    status: 'completed',
-                                }, {
-                                    onSuccess: () => {
-                                        toast.success(`Order ${order.id} has been completed successfully.`);
-                                    }
-                                });
+                                router.put(
+                                    update(order.id).url,
+                                    {
+                                        status: 'completed',
+                                    },
+                                    {
+                                        onSuccess: () => {
+                                            toast.success(
+                                                `Order ${order.id} has been completed successfully.`,
+                                            );
+                                        },
+                                    },
+                                );
                             }}
-                            variant={order.status === 'completed' ? 'secondary' : 'default'}
+                            variant={
+                                order.status === 'completed'
+                                    ? 'secondary'
+                                    : 'default'
+                            }
+                            className='w-full sm:w-auto'
                         >
                             Finish Order
-                        </Button>
-                        <Button onClick={() => router.visit(show(order.id))}>
-                            See Details
                         </Button>
                         <Button
                             disabled={
@@ -133,10 +136,10 @@ export function OrderCard({ order, canManageOrder }: Props) {
                             }
                             variant="secondary"
                             onClick={() => setShowRemoveDialog(true)}
+                            className='w-full sm:w-auto'
                         >
                             Cancel Order
                         </Button>
-                    </div>
                 </CardFooter>
             </Card>
 
@@ -161,9 +164,11 @@ export function OrderCard({ order, canManageOrder }: Props) {
                             onClick={() => {
                                 router.delete(destroy(order.id).url, {
                                     onSuccess: () => {
-                                        setShowRemoveDialog(false)
-                                        toast.success(`Order ${order.id} has been cancelled successfully.`);
-                                    }
+                                        setShowRemoveDialog(false);
+                                        toast.success(
+                                            `Order ${order.id} has been cancelled successfully.`,
+                                        );
+                                    },
                                 });
                             }}
                         >

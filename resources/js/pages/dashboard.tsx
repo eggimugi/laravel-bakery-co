@@ -1,4 +1,4 @@
-import { Head, router } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import {
     CakeSlice,
     Microwave,
@@ -35,7 +35,10 @@ export default function Dashboard({
     stockMovements,
     allCakes,
 }: Props) {
-    console.log(stockMovements);
+    const { auth } = usePage().props;
+    const canAccessStaff = auth.user?.roles?.some((r) =>
+        ['owner'].includes(r.name),
+    );
 
     return (
         <>
@@ -68,12 +71,14 @@ export default function Dashboard({
                 <div className="space-y-6">
                     <h2 className="text-lg font-medium">Quick Actions</h2>
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
-                        <QuickActionCard
-                            icon={<Users />}
-                            title="Manage Staffs"
-                            description="Manage your bakery's staff"
-                            onClick={() => router.visit(staffs())}
-                        />
+                        {canAccessStaff && (
+                            <QuickActionCard
+                                icon={<Users />}
+                                title="Manage Staffs"
+                                description="Manage your bakery's staff"
+                                onClick={() => router.visit(staffs())}
+                            />
+                        )}
                         <QuickActionCard
                             icon={<CakeSlice />}
                             title="Cakes Menu"
@@ -116,7 +121,7 @@ export default function Dashboard({
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
+                <div className="grid grid-cols-1 gap-6 xl:grid-cols-4">
                     <div className="col-span-2 space-y-6 xl:col-span-3">
                         <h2 className="text-lg font-medium">
                             Shout Out to BakeryCo. Staff

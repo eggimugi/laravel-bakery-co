@@ -17,52 +17,11 @@ class MaterialFactory extends Factory
      */
     public function definition(): array
     {
-        $materials = [
-            [
-                'material_name' => 'Flour',
-                'material_price' => 10000,
-                'stock' => 100,
-                'unit' => 'kg',
-                'material_type' => 'powder',
-            ],
-            [
-                'material_name' => 'Sugar',
-                'material_price' => 8000,
-                'stock' => 200,
-                'unit' => 'kg',
-                'material_type' => 'powder',
-            ],
-            [
-                'material_name' => 'Butter',
-                'material_price' => 15000,
-                'stock' => 50,
-                'unit' => 'kg',
-                'material_type' => 'solid',
-            ],
-            [
-                'material_name' => 'Eggs',
-                'material_price' => 2000,
-                'stock' => 300,
-                'unit' => 'pcs',
-                'material_type' => 'solid',
-            ],
-            [
-                'material_name' => 'Milk',
-                'material_price' => 12000,
-                'stock' => 80,
-                'unit' => 'liter',
-                'material_type' => 'liquid',
-            ]
-        ];
-
-        $material = fake()->randomElement($materials);
-
         return [
-            'material_name' => $material['material_name'],
-            'material_price' => $material['material_price'],
-            'stock' => $material['stock'],
-            'unit' => $material['unit'],
-            'material_type' => $material['material_type'],
+            'material_name' => fake()->word(),
+            'stock' => fake()->numberBetween(10, 100),
+            'unit' => fake()->randomElement(['kg', 'gr', 'l', 'ml', 'item']),
+            'material_type' => fake()->randomElement(['powder', 'solid', 'liquid']),
         ];
     }
 }

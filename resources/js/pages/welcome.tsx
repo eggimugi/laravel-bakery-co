@@ -1,10 +1,15 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 import AppLogo from '@/components/app-logo';
 import { dashboard, login } from '@/routes';
-import { register } from '@/routes';
+import { create } from '@/routes/orders';
 
 export default function Welcome() {
     const { auth } = usePage().props;
+    const canAccessDashboard = auth.user?.roles?.some((r) =>
+        ['owner', 'manager'].includes(r.name),
+    );
+
+    const homeHref = canAccessDashboard ? dashboard() : create();
 
     return (
         <>
@@ -14,10 +19,10 @@ export default function Welcome() {
                     <nav className="flex items-center justify-end gap-4">
                         {auth.user ? (
                             <Link
-                                href={dashboard()}
+                                href={homeHref}
                                 className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
                             >
-                                Dashboard
+                                {canAccessDashboard ? 'Dashboard' : 'Orders'}
                             </Link>
                         ) : (
                             <>
@@ -27,12 +32,6 @@ export default function Welcome() {
                                 >
                                     Log in
                                 </Link>
-                                <Link
-                                    href={register()}
-                                    className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
-                                >
-                                    Register
-                                </Link>
                             </>
                         )}
                     </nav>
@@ -40,7 +39,7 @@ export default function Welcome() {
                 <main className="flex w-full flex-col items-center justify-center gap-16 opacity-100 transition-opacity duration-750 lg:grow starting:opacity-0">
                     <div className="space-y-8">
                         <h1 className="flex items-center justify-center gap-2">
-                            <AppLogo/>
+                            <AppLogo />
                         </h1>
                         <p className="text-center text-6xl lg:max-w-3xl">
                             Crafted by Hand, Baked with{' '}

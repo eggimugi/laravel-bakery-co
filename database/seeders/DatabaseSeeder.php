@@ -2,7 +2,18 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use Database\Seeders\Cake\CakeSeeder;
+use Database\Seeders\Cake\CompositionSeeder;
+use Database\Seeders\Cake\MaterialSeeder;
+use Database\Seeders\Cake\ProductionSeeder;
+use Database\Seeders\Order\DetailOrderSeeder;
+use Database\Seeders\Order\OrderSeeder;
+use Database\Seeders\Supply\DetailSupplySeeder;
+use Database\Seeders\Supply\SupplierSeeder;
+use Database\Seeders\Supply\SupplySeeder;
+use Database\Seeders\User\PermissionSeeder;
+use Database\Seeders\User\RoleSeeder;
+use Database\Seeders\User\UserSeeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,11 +26,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $this->call([
+            PermissionSeeder::class,
+            RoleSeeder::class,
+            UserSeeder::class,
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            CakeSeeder::class,
+            MaterialSeeder::class,
+            SupplierSeeder::class,
+
+            CompositionSeeder::class,
+            ProductionSeeder::class,
+            SupplySeeder::class,
+
+            DetailSupplySeeder::class,
+            OrderSeeder::class,
+            DetailOrderSeeder::class,
         ]);
     }
 }

@@ -26,6 +26,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { formatRupiah } from '@/lib/currency';
+import { formatDate } from '@/lib/date';
 import { destroy, edit, show } from '@/routes/supplies';
 import type { Supply } from '@/types';
 
@@ -44,13 +45,28 @@ export function SupplyCard({ supply, canEdit, canRemove }: Props) {
 
     return (
         <>
-            <Card className="w-full">
+            <Card className="w-full justify-between">
                 <CardHeader className="flex-row items-center justify-between px-6">
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-col gap-2">
                         <CardTitle>{supply.supplier.supplier_name}</CardTitle>
-                        <span className="text-sm text-muted-foreground">
-                            {supply.supply_date}
-                        </span>
+
+                        <div className="flex items-center gap-2">
+                            <span className="text-sm text-muted-foreground">
+                                {formatDate(supply.supply_date)}
+                            </span>
+
+                            <Badge
+                                variant={
+                                    supply.cancelled_at
+                                        ? 'default'
+                                        : 'secondary'
+                                }
+                            >
+                                {supply.cancelled_at
+                                    ? 'Cancelled'
+                                    : 'Completed'}
+                            </Badge>
+                        </div>
                     </div>
 
                     <DropdownMenu>
@@ -90,25 +106,9 @@ export function SupplyCard({ supply, canEdit, canRemove }: Props) {
                     <CardDescription className="flex flex-col gap-6">
                         <div className="flex items-center justify-between">
                             <div className="flex flex-col">
-                                <p>
-                                    {supply.supplier.supplier_address}
-                                </p>
-                                <p>
-                                    {supply.supplier.supplier_phone}
-                                </p>
+                                <p>{supply.supplier.supplier_address}</p>
+                                <p>{supply.supplier.supplier_phone}</p>
                             </div>
-
-                            <Badge
-                                variant={
-                                    supply.cancelled_at
-                                        ? 'default'
-                                        : 'secondary'
-                                }
-                            >
-                                {supply.cancelled_at
-                                    ? 'Cancelled'
-                                    : 'Completed'}
-                            </Badge>
                         </div>
 
                         <div className="flex items-center justify-between">

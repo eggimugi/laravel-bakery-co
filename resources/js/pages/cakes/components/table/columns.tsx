@@ -11,6 +11,9 @@ export const getColumns = (
     {
         accessorKey: 'cake_name',
         header: 'Cake Name',
+        cell: ({ row }) => {
+            return <span className="capitalize">{row.original.cake_name}</span>;
+        },
     },
     {
         accessorKey: 'cake_price',
@@ -26,10 +29,16 @@ export const getColumns = (
     {
         accessorKey: 'unit',
         header: 'Unit',
+        cell: ({ row }) => {
+            return <span className="capitalize">{row.original.unit}</span>;
+        }
     },
     {
         accessorKey: 'cake_flavour',
         header: 'Flavour',
+        cell: ({ row }) => {
+            return <span className="capitalize">{row.original.cake_flavour}</span>;
+        }
     },
     {
         accessorKey: 'best_before',

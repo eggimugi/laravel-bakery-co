@@ -24,7 +24,8 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { destroy, edit, show } from '@/routes/productions';
+import { formatDate } from '@/lib/date';
+import { destroy, edit } from '@/routes/productions';
 import type { Production } from '@/types';
 
 type Props = {
@@ -104,20 +105,18 @@ export function ProductionCard({ production, canEdit, canRemove }: Props) {
 
                     <div className='flex flex-col justify-between w-full'>
                         <div>
-                            <CardTitle>{production.cake.cake_name}</CardTitle>
+                            <CardTitle className='capitalize'>{production.cake.cake_name}</CardTitle>
                             <CardDescription className="flex items-center justify-between">
-                                <p>{production.cake.cake_flavour}</p>
+                                <p className='capitalize'>{production.cake.cake_flavour}</p>
                             </CardDescription>
                         </div>
 
-                        <Button
-                            className="w-full"
-                            onClick={() => {
-                                router.visit(show(production.cake.id));
-                            }}
-                        >
-                            View
-                        </Button>
+                        <div>
+                            <CardDescription>
+                                <p className="capitalize">{formatDate(production.production_date)}</p>
+                                <p className="capitalize"><span>By: </span>{production.user.name}</p>
+                            </CardDescription>
+                        </div>
                     </div>
                 </CardContent>
             </Card>

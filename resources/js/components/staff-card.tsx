@@ -20,18 +20,12 @@ export default function StaffCard({ staff }: Props) {
                         </Badge>
                     </div>
 
-                    <CardDescription className='space-y-1'>
-                        <div className="flex">
-                            <p className="capitalize">
-                                {staff.roles?.[0]?.name || 'No Role'}
-                            </p>
-                            <p className="mx-1.5">
-                                |
-                            </p>
-                            <p>
-                                {staff.email}
-                            </p>
-                        </div>
+                    <CardDescription className="space-y-1">
+                        <p className="capitalize">
+                            {staff.roles?.[0]?.name || 'No Role'}
+                        </p>
+
+                        <p>{staff.email}</p>
 
                         <p>
                             <span className="font-medium">Joined Date: </span>

@@ -9,9 +9,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'welcome')->name('home');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'role:owner|manager'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});
 
+Route::middleware(['auth', 'verified', 'role:owner'])->group(function () {
     // Staff Management Routes
     Route::get('/staffs', [StaffController::class, 'index'])->name('staffs.index');
     Route::get('/staffs/add-staff', [StaffController::class, 'create'])->name('staffs.create');
@@ -19,6 +21,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/staffs/{user}/edit', [StaffController::class, 'edit'])->name('staffs.edit');
     Route::put('/staffs/{user}', [StaffController::class, 'update'])->name('staffs.update');
     Route::delete('/staffs/{user}', [StaffController::class, 'destroy'])->name('staffs.destroy');
+});
+
+Route::middleware(['auth', 'verified'])->group(function () {
 
     // Cake Management Routes
     Route::get('/cakes', [CakeController::class, 'index'])->name('cakes.index');

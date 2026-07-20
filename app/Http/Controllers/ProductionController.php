@@ -27,8 +27,8 @@ class ProductionController extends Controller
 
         $stats = [
             'totalProductions' => Production::count(),
-            'completed' => Production::whereNotNull('cancelled_at')->count(),
-            'cancelled' => Production::whereNull('cancelled_at')->count(),
+            'completed' => Production::whereNull('cancelled_at')->count(),
+            'cancelled' => Production::whereNotNull('cancelled_at')->count(),
         ];
 
         return inertia('productions/production-history', [
@@ -47,8 +47,8 @@ class ProductionController extends Controller
 
         $stats = [
             'totalProductions' => Production::count(),
-            'completed' => Production::whereNotNull('cancelled_at')->count(),
-            'cancelled' => Production::whereNull('cancelled_at')->count(),
+            'completed' => Production::whereNull('cancelled_at')->count(),
+            'cancelled' => Production::whereNotNull('cancelled_at')->count(),
         ];
 
         return inertia('productions/add-production', [
@@ -91,8 +91,8 @@ class ProductionController extends Controller
         $production->load(['user', 'cake']);
         $stats = [
             'totalProductions' => Production::count(),
-            'completed' => Production::whereNotNull('cancelled_at')->count(),
-            'cancelled' => Production::whereNull('cancelled_at')->count(),
+            'completed' => Production::whereNull('cancelled_at')->count(),
+            'cancelled' => Production::whereNotNull('cancelled_at')->count(),
         ];
 
         return inertia('productions/edit-production', [

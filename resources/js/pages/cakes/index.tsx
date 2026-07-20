@@ -24,7 +24,7 @@ export default function Cakes({ cakes, lessStockCakes }: Props) {
                     </h2>
 
                     {lessStockCakes.length === 0 ? (
-                        <p className="border text-center text-sm text-muted-foreground">
+                        <p className="border p-6 text-center text-sm text-muted-foreground">
                             No cakes are running low on stock.
                         </p>
                     ) : (

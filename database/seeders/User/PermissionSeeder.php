@@ -1,12 +1,11 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\User;
 
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
-class RolePermissionSeeder extends Seeder
+class PermissionSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -79,48 +78,5 @@ class RolePermissionSeeder extends Seeder
                 ]);
             }
         }
-
-        $owner = Role::firstOrCreate([
-            'name' => 'owner',
-        ]);
-
-        $manager = Role::firstOrCreate([
-            'name' => 'manager',
-        ]);
-
-        $cashier = Role::firstOrCreate([
-            'name' => 'cashier',
-        ]);
-
-        $customer = Role::firstOrCreate([
-            'name' => 'customer',
-        ]);
-
-        $owner->syncPermissions(Permission::all());
-
-        $manager->syncPermissions(
-            Permission::whereNotLike('name', 'user.%')->get()
-        );
-
-        $cashier->syncPermissions([
-            'cake.view',
-
-            'composition.view',
-
-            'order.view',
-            'order.create',
-            'order.update',
-            'order.cancel',
-        ]);
-
-        $customer->syncPermissions([
-            'cake.view',
-
-            'composition.view',
-
-            'order.view',
-            'order.create',
-            'order.cancel',
-        ]);
     }
 }

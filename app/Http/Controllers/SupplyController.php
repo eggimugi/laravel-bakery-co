@@ -29,8 +29,8 @@ class SupplyController extends Controller
 
         $stats = [
             'totalSupplies' => Supply::count(),
-            'completed' => Supply::whereNotNull('cancelled_at')->count(),
-            'cancelled' => Supply::whereNull('cancelled_at')->count(),
+            'completed' => Supply::whereNull('cancelled_at')->count(),
+            'cancelled' => Supply::whereNotNull('cancelled_at')->count(),
         ];
 
         return Inertia::render('supplies/index', [
@@ -49,8 +49,8 @@ class SupplyController extends Controller
         $materials = Material::select('id', 'material_name')->get();
         $stats = [
             'totalSupplies' => Supply::count(),
-            'completed' => Supply::whereNotNull('cancelled_at')->count(),
-            'cancelled' => Supply::whereNull('cancelled_at')->count(),
+            'completed' => Supply::whereNull('cancelled_at')->count(),
+            'cancelled' => Supply::whereNotNull('cancelled_at')->count(),
         ];
 
         return Inertia::render('supplies/add-supply', [
@@ -79,9 +79,15 @@ class SupplyController extends Controller
     public function show(Supply $supply)
     {
         $supply->load(['user', 'supplier', 'detailSupplies.material']);
+        $stats = [
+            'totalSupplies' => Supply::count(),
+            'completed' => Supply::whereNull('cancelled_at')->count(),
+            'cancelled' => Supply::whereNotNull('cancelled_at')->count(),
+        ];
 
         return Inertia::render('supplies/show-supply', [
             'supply' => $supply,
+            'stats' => $stats,
         ]);
     }
 
@@ -95,8 +101,8 @@ class SupplyController extends Controller
         $materials = Material::select('id', 'material_name')->get();
         $stats = [
             'totalSupplies' => Supply::count(),
-            'completed' => Supply::whereNotNull('cancelled_at')->count(),
-            'cancelled' => Supply::whereNull('cancelled_at')->count(),
+            'completed' => Supply::whereNull('cancelled_at')->count(),
+            'cancelled' => Supply::whereNotNull('cancelled_at')->count(),
         ];
 
         return Inertia::render('supplies/edit-supply', [

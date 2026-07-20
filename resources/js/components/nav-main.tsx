@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { ChevronRight, LayoutGrid } from 'lucide-react';
 import {
     Collapsible,
@@ -23,6 +23,11 @@ export function NavMain({ groups = [] }: { groups: NavGroup[] }) {
     const { isCurrentUrl } = useCurrentUrl();
     const { can } = usePermission();
 
+    const { auth } = usePage().props;
+    const canAccessDashboard = auth.user?.roles?.some((r) =>
+        ['owner', 'manager'].includes(r.name),
+    );
+
     const visibleGroups = groups
         .map((group) => ({
             ...group,
@@ -40,18 +45,20 @@ export function NavMain({ groups = [] }: { groups: NavGroup[] }) {
     return (
         <>
             <SidebarMenu className="px-2">
-                <SidebarMenuItem>
-                    <SidebarMenuButton
-                        asChild
-                        isActive={isCurrentUrl('/dashboard')}
-                        tooltip={{ children: 'Dashboard' }}
-                    >
-                        <Link href="/dashboard" prefetch>
-                            <LayoutGrid />
-                            <span>Dashboard</span>
-                        </Link>
-                    </SidebarMenuButton>
-                </SidebarMenuItem>
+                {canAccessDashboard && (
+                    <SidebarMenuItem>
+                        <SidebarMenuButton
+                            asChild
+                            isActive={isCurrentUrl('/dashboard')}
+                            tooltip={{ children: 'Dashboard' }}
+                        >
+                            <Link href="/dashboard" prefetch>
+                                <LayoutGrid />
+                                <span>Dashboard</span>
+                            </Link>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                )}
             </SidebarMenu>
 
             <SidebarGroup>
@@ -67,7 +74,11 @@ export function NavMain({ groups = [] }: { groups: NavGroup[] }) {
                                 >
                                     <SidebarMenuItem>
                                         <CollapsibleTrigger asChild>
-                                            <SidebarMenuButton tooltip={{ children: item.title }}>
+                                            <SidebarMenuButton
+                                                tooltip={{
+                                                    children: item.title,
+                                                }}
+                                            >
                                                 {item.icon && <item.icon />}
                                                 <span>{item.title}</span>
 

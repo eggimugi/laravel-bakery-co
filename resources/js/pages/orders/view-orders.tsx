@@ -30,7 +30,7 @@ export default function ViewOrders({ orders, stats }: Props) {
                     <div className="min-w-0 flex-1">
                         <ViewOrderStats stats={stats} />
 
-                        <div className="sticky top-16 space-y-4 bg-background py-4">
+                        <div className="sticky top-16 z-20 space-y-4 bg-background py-4">
                             <div className="flex items-center gap-6">
                                 <Input
                                     placeholder="Search..."
@@ -50,7 +50,7 @@ export default function ViewOrders({ orders, stats }: Props) {
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-4">
+                            <div className="flex flex-wrap items-center gap-4">
                                 <Button variant="outline" size="default">
                                     Processing
                                 </Button>
@@ -70,9 +70,9 @@ export default function ViewOrders({ orders, stats }: Props) {
                         </div>
 
                         <InfiniteScroll data="orders">
-                            <div className="grid grid-cols-1 gap-6 xl:grid-cols-2 2xl:grid-cols-3">
+                            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 2xl:grid-cols-3">
                                 {orders.data.map((order) => (
-                                    <div key={order.id}>
+                                    <div key={order.id} className='h-full'>
                                         <OrderCard
                                             key={order.id}
                                             order={order}

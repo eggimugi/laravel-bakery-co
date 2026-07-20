@@ -35,7 +35,7 @@ export default function ShowComposition({ cake, stats }: Props) {
 
                 <Card className="grid grid-cols-5 flex-row">
                     <CardHeader className="col-span-2">
-                        <CardTitle className="text-2xl font-bold">
+                        <CardTitle className="text-2xl font-bold capitalize">
                             {cake.cake_name}
                         </CardTitle>
 
@@ -46,11 +46,11 @@ export default function ShowComposition({ cake, stats }: Props) {
                         />
 
                         <CardDescription className="text-base text-primary">
-                            <p>
+                            <p className="capitalize">
                                 <span className="font-semibold">Flavour:</span>{' '}
                                 {cake.cake_flavour}
                             </p>
-                            <p>
+                            <p className="capitalize">
                                 <span className="font-semibold">Stock:</span>{' '}
                                 {cake.stock}{' '}
                                 <span className="capitalize">

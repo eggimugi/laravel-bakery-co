@@ -34,7 +34,7 @@ export default function Materials({
                     </h2>
 
                     {lessStockMaterials.length === 0 ? (
-                        <p className="border text-center text-sm text-muted-foreground">
+                        <p className="border text-center text-sm text-muted-foreground p-6">
                             No materials are running low on stock.
                         </p>
                     ) : (

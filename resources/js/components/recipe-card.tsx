@@ -108,9 +108,9 @@ export function RecipeCard({ cake, canAdd, canEdit, canRemove }: Props) {
 
                     <div className='flex flex-col justify-between w-full'>
                         <div>
-                            <CardTitle>{cake.cake_name}</CardTitle>
+                            <CardTitle className='capitalize'>{cake.cake_name}</CardTitle>
                             <CardDescription className="flex items-center justify-between">
-                                <p>{cake.cake_flavour}</p>
+                                <p className='capitalize'>{cake.cake_flavour}</p>
                             </CardDescription>
                         </div>
 

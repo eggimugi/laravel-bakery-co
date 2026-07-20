@@ -40,7 +40,7 @@ export function OrderMenuCard({
                     className="aspect-square size-36 object-contain"
                 />
                 <CardContent className="flex w-full flex-col justify-between gap-2 px-0">
-                    <CardTitle>
+                    <CardTitle className='capitalize'>
                         {cake.cake_name}
                         <p className="text-sm text-muted-foreground font-normal">
                             {cake.cake_flavour}
