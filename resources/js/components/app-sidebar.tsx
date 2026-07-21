@@ -1,4 +1,4 @@
-import { router, usePage } from '@inertiajs/react';
+import { router } from '@inertiajs/react';
 import {
     Users,
     CakeSlice,
@@ -20,6 +20,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { useRole } from '@/hooks/use-role';
 import { dashboard } from '@/routes';
 import { create } from '@/routes/orders';
 import type { NavGroup } from '@/types';
@@ -172,12 +173,9 @@ const mainNavGroups: NavGroup[] = [
 ];
 
 export function AppSidebar() {
-    const { auth } = usePage().props;
-    const canAccessDashboard = auth.user?.roles?.some((r) =>
-        ['owner', 'manager'].includes(r.name),
-    );
+    const { hasRole } = useRole();    
 
-    const homeHref = canAccessDashboard ? dashboard() : create();
+    const homeHref = hasRole('owner') || hasRole('manager') ? dashboard() : create();
 
     return (
         <Sidebar collapsible="icon" variant="inset">

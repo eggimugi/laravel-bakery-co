@@ -1,4 +1,4 @@
-import { Head, router, usePage } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import {
     CakeSlice,
     Microwave,
@@ -11,6 +11,7 @@ import { CakeCard } from '@/components/cake-card';
 import { Container } from '@/components/container';
 import { QuickActionCard } from '@/components/quick-action-card';
 import StaffCard from '@/components/staff-card';
+import { useRole } from '@/hooks/use-role';
 import { formatStockMovementType } from '@/lib/stock-movement-type';
 import { dashboard } from '@/routes';
 import { index as cakes } from '@/routes/cakes';
@@ -35,10 +36,7 @@ export default function Dashboard({
     stockMovements,
     allCakes,
 }: Props) {
-    const { auth } = usePage().props;
-    const canAccessStaff = auth.user?.roles?.some((r) =>
-        ['owner'].includes(r.name),
-    );
+    const { hasRole } = useRole();
 
     return (
         <>
@@ -71,7 +69,7 @@ export default function Dashboard({
                 <div className="space-y-6">
                     <h2 className="text-lg font-medium">Quick Actions</h2>
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
-                        {canAccessStaff && (
+                        {hasRole('owner') && (
                             <QuickActionCard
                                 icon={<Users />}
                                 title="Manage Staffs"

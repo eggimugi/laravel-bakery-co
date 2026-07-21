@@ -1,11 +1,3 @@
-type Role = {
-    id: number;
-    name: string;
-    guard_name: string;
-    created_at: string;
-    updated_at: string;
-};
-
 export type User = {
     id: number;
     name: string;
@@ -18,7 +10,7 @@ export type User = {
 
     orders_count?: number;
 
-    roles: Role[];
+    roles: string[];
     permissions: string[];
 
     [key: string]: unknown;

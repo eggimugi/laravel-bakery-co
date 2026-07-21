@@ -18,6 +18,30 @@ export default function Login({ status }: Props) {
         <>
             <Head title="Log in" />
 
+            <div className='space-y-2'>
+                <p className="text-sm text-muted-foreground"> Owner: </p>
+                <p className="space-x-6 text-sm text-muted-foreground">
+                    <span className="font-semibold">owner@mail.com</span>
+                    Password: <span className="font-semibold">password123</span>
+                </p>
+
+                <p className="text-sm text-muted-foreground"> Manager: </p>
+                <p className="space-x-6 text-sm text-muted-foreground">
+                    <span className="font-semibold">
+                        melba.jones@example.net
+                    </span>
+                    Password: <span className="font-semibold">password</span>
+                </p>
+
+                <p className="text-sm text-muted-foreground"> Cashier: </p>
+                <p className="space-x-6 text-sm text-muted-foreground">
+                    <span className="font-semibold">
+                        adan.padberg@example.com
+                    </span>
+                    Password: <span className="font-semibold">password</span>
+                </p>
+            </div>
+
             <Form
                 {...store.form()}
                 resetOnSuccess={['password']}

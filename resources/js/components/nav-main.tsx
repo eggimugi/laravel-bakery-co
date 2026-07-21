@@ -1,4 +1,4 @@
-import { Link, usePage } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import { ChevronRight, LayoutGrid } from 'lucide-react';
 import {
     Collapsible,
@@ -17,16 +17,17 @@ import {
 } from '@/components/ui/sidebar';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { usePermission } from '@/hooks/use-permission';
+import { useRole } from '@/hooks/use-role';
+import { dashboard } from '@/routes';
+import { create } from '@/routes/orders';
 import type { NavGroup } from '@/types';
 
 export function NavMain({ groups = [] }: { groups: NavGroup[] }) {
     const { isCurrentUrl } = useCurrentUrl();
     const { can } = usePermission();
+    const { hasRole } = useRole();
 
-    const { auth } = usePage().props;
-    const canAccessDashboard = auth.user?.roles?.some((r) =>
-        ['owner', 'manager'].includes(r.name),
-    );
+    const homeHref = hasRole('owner') || hasRole('manager') ? dashboard() : create();
 
     const visibleGroups = groups
         .map((group) => ({
@@ -45,20 +46,18 @@ export function NavMain({ groups = [] }: { groups: NavGroup[] }) {
     return (
         <>
             <SidebarMenu className="px-2">
-                {canAccessDashboard && (
-                    <SidebarMenuItem>
-                        <SidebarMenuButton
-                            asChild
-                            isActive={isCurrentUrl('/dashboard')}
-                            tooltip={{ children: 'Dashboard' }}
-                        >
-                            <Link href="/dashboard" prefetch>
-                                <LayoutGrid />
-                                <span>Dashboard</span>
-                            </Link>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                )}
+                <SidebarMenuItem>
+                    <SidebarMenuButton
+                        asChild
+                        isActive={isCurrentUrl(homeHref)}
+                        tooltip={{ children: 'Dashboard' }}
+                    >
+                        <Link href={homeHref} prefetch>
+                            <LayoutGrid />
+                            <span>Dashboard</span>
+                        </Link>
+                    </SidebarMenuButton>
+                </SidebarMenuItem>
             </SidebarMenu>
 
             <SidebarGroup>
