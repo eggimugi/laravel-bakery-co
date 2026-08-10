@@ -38,7 +38,7 @@ export default function Welcome() {
                     </nav>
                 </header>
                 <main className="flex-1 flex w-full h-full flex-col items-center justify-evenly sm:justify-center gap-25 opacity-100 transition-opacity duration-1500 starting:opacity-0">
-                    <div className="space-y-8 sm:space-y-5 text-secondary">
+                    <div className="space-y-8 sm:space-y-5 text-secondary yex">
                         <AppLogo />
                         <p className="text-center text-5xl sm:text-7xl font-extrabold lg:max-w-4xl">
                             Crafted by Hand, Baked with{' '}

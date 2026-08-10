@@ -8,8 +8,8 @@ type Props = {
 export default function AppLogo({ className }: Props) {
     return (
         <>
-            <div className={cn("text-center font-extrabold", className)}>
-                <AppLogoIcon />
+            <div className={cn("text-center font-extrabold")}>
+                <AppLogoIcon className={className} />
             </div>
         </>
     );

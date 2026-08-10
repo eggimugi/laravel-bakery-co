@@ -27,7 +27,7 @@ export function CakeCard({ cake }: Props) {
                     </Badge>
                 </div>
                 <img
-                    src={'/croissant.jpg'}
+                    src={'/croissant.webp'}
                     alt={cake.cake_name}
                     className="aspect-video h-44 w-full rounded-lg object-cover"
                 />

@@ -18,7 +18,7 @@ import { formatStockMovementType } from '@/lib/stock-movement-type';
 import { dashboard } from '@/routes';
 import { index as cakes } from '@/routes/cakes';
 import { index as materials } from '@/routes/materials';
-import { create as orders } from '@/routes/orders';
+import { create as orders, index } from '@/routes/orders';
 import { create as productions } from '@/routes/productions';
 import { index as staffs } from '@/routes/staffs';
 import { create as supplies } from '@/routes/supplies';
@@ -88,13 +88,14 @@ export default function Dashboard({
                         </div>
 
                         <div className="flex w-full flex-col gap-4 xs:flex-row xs:gap-8">
-                            <Button className="w-full xs:w-40">
+                            <Button className="w-full xs:w-40" onClick={() => router.visit(orders())}>
                                 <ShoppingCartIcon className="size-4" />
                                 Make an Order
                             </Button>
                             <Button
                                 className="w-full xs:w-40"
                                 variant="outline"
+                                onClick={() => router.visit(index())}
                             >
                                 <ReceiptText className="size-4" />
                                 View Orders
@@ -102,7 +103,7 @@ export default function Dashboard({
                         </div>
                     </div>
                     <img
-                        src="/dashboard.png"
+                        src="/dashboard.webp"
                         alt="Bakery Dashboard"
                         className="hidden h-72 lg:block xl:h-95"
                     />

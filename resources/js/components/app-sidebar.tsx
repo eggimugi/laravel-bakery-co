@@ -184,7 +184,7 @@ export function AppSidebar() {
                         <Link
                             href={homeHref}
                         >
-                            <AppLogo className='text-start'/>
+                            <AppLogo className='justify-start'/>
                         </Link>
                     </SidebarMenuItem>
                 </SidebarMenu>

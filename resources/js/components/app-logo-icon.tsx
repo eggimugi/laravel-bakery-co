@@ -1,18 +1,23 @@
 import { Croissant } from 'lucide-react';
 import type { HTMLAttributes } from 'react';
+import { cn } from '@/lib/utils';
 
-export default function AppLogoIcon(props: HTMLAttributes<HTMLHeadingElement>) {
+type AppLogoIconProps = HTMLAttributes<HTMLDivElement> & {
+    className?: string;
+};
+
+export default function AppLogoIcon({ className, ...props }: AppLogoIconProps) {
     return (
-        <>
-            <div className="flex items-center gap-4">
+        <div
+            className={cn('flex items-center justify-center gap-4', className)}
+        >
             <Croissant className="size-6 shrink-0 fill-secondary" />
             <h1
                 {...props}
-                className="text-xl text-secondary font-extrabold truncate group-data-[collapsible=icon]:hidden"
+                className="truncate text-xl font-extrabold text-secondary group-data-[collapsible=icon]:hidden"
             >
                 BakeryCo.
             </h1>
         </div>
-        </>
     );
 }
