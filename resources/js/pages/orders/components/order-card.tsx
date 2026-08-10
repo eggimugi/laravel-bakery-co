@@ -123,7 +123,7 @@ export function OrderCard({ order, canManageOrder }: Props) {
                             variant={
                                 order.status === 'completed'
                                     ? 'secondary'
-                                    : 'default'
+                                    : 'secondary'
                             }
                             className='w-full sm:w-auto'
                         >

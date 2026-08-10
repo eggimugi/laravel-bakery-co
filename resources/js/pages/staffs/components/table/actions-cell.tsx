@@ -14,8 +14,6 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { destroy, edit } from '@/routes/staffs';
@@ -44,8 +42,6 @@ export function ActionsCell({ staff, canEdit, canFire }: ActionsCellProps) {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
                     {canEdit && (
                         <DropdownMenuItem
                             onClick={() => router.visit(edit(staff.id))}

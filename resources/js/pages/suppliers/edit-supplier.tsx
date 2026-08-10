@@ -1,4 +1,4 @@
-import { Head, Link} from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { Container } from '@/components/container';
 import { FormField } from '@/components/form/form-field';
 import { FormHeader } from '@/components/form/form-header';
@@ -42,7 +42,7 @@ export default function EditSupplier({ supplier, totalSuppliers }: Props) {
 
                 <form
                     onSubmit={submit}
-                    className="mt-10 w-full rounded-xl border p-4"
+                    className="w-full rounded-xl border p-6"
                 >
                     <>
                         <FormHeader
@@ -50,7 +50,7 @@ export default function EditSupplier({ supplier, totalSuppliers }: Props) {
                             description="Update the supplier information for your bakery. Fill in the details below to modify materials and their quantities."
                         />
 
-                        <div className="grid gap-6">
+                        <div className="grid grid-cols-3 gap-4">
                             <FormField
                                 id="name"
                                 label="Name"
@@ -118,22 +118,22 @@ export default function EditSupplier({ supplier, totalSuppliers }: Props) {
                                 />
                             </FormField>
 
-                            <div className="flex items-center gap-3 pt-2">
+                            <div className="flex items-center gap-4">
                                 <Button
                                     type="submit"
-                                    tabIndex={6}
-                                    data-test="edit-supplier-button"
+                                    tabIndex={4}
+                                    disabled={processing}
                                 >
                                     {processing && <Spinner />}
                                     Edit supplier
                                 </Button>
-                                <Link
-                                    href={suppliersIndex()}
-                                    tabIndex={7}
-                                    className="text-sm text-muted-foreground hover:underline"
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => window.history.back()}
                                 >
                                     Cancel
-                                </Link>
+                                </Button>
                             </div>
                         </div>
                     </>

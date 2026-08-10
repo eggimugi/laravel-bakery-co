@@ -13,7 +13,7 @@ export function SupplyStatsHeader({ stats }: Props) {
         <div className="flex w-full flex-col justify-between gap-6 rounded-xl border p-6 xl:flex-row xl:items-center">
             <div>
                 <h1 className="text-2xl font-bold">Supply History</h1>
-                <p className="text-muted-foreground">
+                <p className="text-muted">
                     Manage your supply records and track their progress.
                 </p>
             </div>

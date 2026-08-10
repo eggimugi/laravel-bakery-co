@@ -1,9 +1,10 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { Container } from '@/components/container';
 import { FormField } from '@/components/form/form-field';
 import { FormHeader } from '@/components/form/form-header';
+import { NumberInput } from '@/components/form/number-input';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
@@ -71,14 +72,14 @@ export default function AddProduction({ cakes, selectedCakeId, stats }: Props) {
 
                 <form
                     onSubmit={submit}
-                    className="w-full rounded-xl border p-4"
+                    className="w-full rounded-xl border p-6"
                 >
                     <FormHeader
                         title="Add Production"
                         description="Create a new production entry for your bakery. Fill in the details below to add the production information."
                     />
 
-                    <div className="grid gap-6">
+                    <div className="grid grid-cols-3 gap-4">
                         <FormField
                             id="cake_name"
                             label="Cake Name"
@@ -114,20 +115,15 @@ export default function AddProduction({ cakes, selectedCakeId, stats }: Props) {
                             label="Quantity"
                             error={errors.quantity}
                         >
-                            <Input
+                            <NumberInput
                                 id="quantity"
-                                type="number"
                                 required
                                 tabIndex={2}
                                 placeholder="Quantity produced"
                                 value={data.quantity}
-                                onChange={(e) => {
-                                    const value = e.target.value;
-                                    setData(
-                                        'quantity',
-                                        value === '' ? '' : Number(value),
-                                    );
-                                }}
+                                onValueChange={(value) =>
+                                    setData('quantity', value)
+                                }
                             />
                         </FormField>
 
@@ -151,17 +147,21 @@ export default function AddProduction({ cakes, selectedCakeId, stats }: Props) {
                         </FormField>
 
                         <div className="flex items-center gap-3 pt-2">
-                            <Button type="submit" tabIndex={6}>
+                            <Button
+                                type="submit"
+                                tabIndex={4}
+                                disabled={processing}
+                            >
                                 {processing && <Spinner />}
                                 Create Production
                             </Button>
-                            <Link
-                                href={index()}
-                                tabIndex={7}
-                                className="text-sm text-muted-foreground hover:underline"
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => window.history.back()}
                             >
                                 Cancel
-                            </Link>
+                            </Button>
                         </div>
                     </div>
                 </form>

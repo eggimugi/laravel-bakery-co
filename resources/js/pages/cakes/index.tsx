@@ -16,15 +16,18 @@ export default function Cakes({ cakes, lessStockCakes }: Props) {
         <>
             <Head title="Cakes" />
             <Container>
-                <CakeStatsHeader totalCakes={cakes.length} />
+                <CakeStatsHeader
+                    totalCakes={cakes.length}
+                    lowStock={lessStockCakes.length}
+                />
 
-                <div className="space-y-6">
+                <div className="space-y-4">
                     <h2 className="text-lg font-medium">
                         Stock is Running Low
                     </h2>
 
                     {lessStockCakes.length === 0 ? (
-                        <p className="border p-6 text-center text-sm text-muted-foreground">
+                        <p className="rounded-xl border p-6 text-center text-sm text-muted">
                             No cakes are running low on stock.
                         </p>
                     ) : (

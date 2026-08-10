@@ -46,8 +46,8 @@ export function RecipeCard({ cake, canAdd, canEdit, canRemove }: Props) {
         <>
             <Card className="w-full">
                 <CardHeader className="flex-row justify-between">
-                    <Badge variant={hasCompositions ? 'default' : 'secondary'}>
-                        {hasCompositions ? 'Compositions' : 'No Compositions'}
+                    <Badge variant="secondary" className="capitalize">
+                        {hasCompositions ? 'Composition' : 'No Composition'}
                     </Badge>
 
                     <DropdownMenu>
@@ -99,18 +99,20 @@ export function RecipeCard({ cake, canAdd, canEdit, canRemove }: Props) {
                     </DropdownMenu>
                 </CardHeader>
 
-                <CardContent className="flex gap-2">
+                <CardContent>
                     <img
                         src="/cake-placeholder.png"
                         alt="Event cover"
-                        className="aspect-video h-32 w-32 rounded-lg object-contain"
+                        className="h-40 mx-auto"
                     />
 
-                    <div className='flex flex-col justify-between w-full'>
+                    <div className='flex flex-col gap-4 w-full'>
                         <div>
                             <CardTitle className='capitalize'>{cake.cake_name}</CardTitle>
                             <CardDescription className="flex items-center justify-between">
                                 <p className='capitalize'>{cake.cake_flavour}</p>
+
+                                <p className='capitalize'>{cake.unit}</p>
                             </CardDescription>
                         </div>
 
@@ -119,6 +121,7 @@ export function RecipeCard({ cake, canAdd, canEdit, canRemove }: Props) {
                             onClick={() => {
                                 router.visit(show(cake.id));
                             }}
+                            variant="secondary"
                         >
                             View
                         </Button>

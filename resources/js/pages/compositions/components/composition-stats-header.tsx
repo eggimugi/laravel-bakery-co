@@ -13,7 +13,7 @@ export function CompositionsStatsHeader({ stats }: Props) {
         <div className="flex w-full flex-col justify-between gap-6 rounded-xl border p-6 xl:flex-row xl:items-center">
             <div>
                 <h1 className="text-2xl font-bold">Cake Recipes</h1>
-                <p className="text-muted-foreground">
+                <p className="text-muted">
                     Manage your cake recipes and their compositions.
                 </p>
             </div>
@@ -25,13 +25,13 @@ export function CompositionsStatsHeader({ stats }: Props) {
                     className='items-start xl:items-end'
                 />
                 <StatsCard
-                    title="Compositions"
+                    title="Composition"
                     value={stats.compositions}
                     unitValue="compositions"
                     className='items-start xl:items-end'
                 />
                 <StatsCard
-                    title="No Compositions"
+                    title="No Composition"
                     value={stats.noCompositions}
                     unitValue="cakes"
                     className='items-start xl:items-end'

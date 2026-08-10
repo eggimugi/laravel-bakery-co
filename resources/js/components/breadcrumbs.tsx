@@ -32,7 +32,7 @@ export function Breadcrumbs({
                                             </BreadcrumbPage>
                                         ) : (
                                             <BreadcrumbLink asChild>
-                                                <Link href={item.href}>
+                                                <Link href={item.href} className='text-muted'>
                                                     {item.title}
                                                 </Link>
                                             </BreadcrumbLink>

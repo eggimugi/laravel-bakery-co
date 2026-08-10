@@ -24,6 +24,15 @@ class SupplyController extends Controller
                     $q->where('supplier_name', 'like', "%{$search}%");
                 });
             })
+            ->when($request->filter, function ($query, $filter) {
+                match ($filter) {
+                    'newest' => $query->orderBy('created_at', 'desc'),
+                    'latest' => $query->orderBy('created_at', 'asc'),
+                    'completed' => $query->whereNull('cancelled_at'),
+                    'cancelled' => $query->whereNotNull('cancelled_at'),
+                    default => null,
+                };
+            })
             ->paginate(8)
             ->withQueryString();
 
@@ -34,8 +43,8 @@ class SupplyController extends Controller
         ];
 
         return Inertia::render('supplies/index', [
-            'supplies' => $supplies,
-            'filters' => $request->only(['search']),
+            'supplies' => Inertia::scroll($supplies),
+            'filters' => $request->only(['search', 'filter']),
             'stats' => $stats,
         ]);
     }

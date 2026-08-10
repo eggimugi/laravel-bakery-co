@@ -1,4 +1,4 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
 import { Container } from '@/components/container';
@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import { useCreateComposition } from '@/hooks/Composition Row/use-create-composition';
-import { index as compositionsIndex, store } from '@/routes/compositions';
+import { index, store } from '@/routes/compositions';
 import type { Material } from '@/types';
 import { CompositionsStatsHeader } from './components/composition-stats-header';
 import { CompositionRowField } from './components/row-field';
@@ -61,15 +61,15 @@ export default function AddComposition({ cake, materials, stats }: Props) {
 
                 <form
                     onSubmit={submit}
-                    className="w-full rounded-xl border p-4"
+                    className="w-full rounded-xl border p-6"
                 >
                     <FormHeader
                         title={`Add Composition for ${cake.cake_name}`}
                         description="Create a new composition for your bakery. Fill in the details below to add materials and their quantities."
                     />
 
-                    <div className="grid gap-6">
-                        <div className="grid gap-3">
+                    <div className="grid gap-4">
+                        <div className="grid gap-4">
                             <Label>Materials</Label>
                             {data.materials.map((row, index) => (
                                 <CompositionRowField
@@ -115,12 +115,13 @@ export default function AddComposition({ cake, materials, stats }: Props) {
                                 {processing && <Spinner />}
                                 Create Composition
                             </Button>
-                            <Link
-                                href={compositionsIndex()}
-                                className="text-sm text-muted-foreground hover:underline"
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => window.history.back()}
                             >
                                 Cancel
-                            </Link>
+                            </Button>
                         </div>
                     </div>
                 </form>
@@ -131,7 +132,7 @@ export default function AddComposition({ cake, materials, stats }: Props) {
 
 AddComposition.layout = {
     breadcrumbs: [
-        { title: 'Compositions', href: '/compositions' },
+        { title: 'Compositions', href: index() },
         { title: 'Add Composition', href: '/compositions/add-composition' },
     ],
 };

@@ -136,6 +136,7 @@ export function SupplyCard({ supply, canEdit, canRemove }: Props) {
                 <CardFooter>
                     <Button
                         className="w-full"
+                        variant="secondary"
                         onClick={() => {
                             router.visit(show(supply.id));
                         }}

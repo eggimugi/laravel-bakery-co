@@ -45,7 +45,7 @@ export function NavMain({ groups = [] }: { groups: NavGroup[] }) {
 
     return (
         <>
-            <SidebarMenu className="px-2">
+            <SidebarMenu className="">
                 <SidebarMenuItem>
                     <SidebarMenuButton
                         asChild
@@ -60,12 +60,12 @@ export function NavMain({ groups = [] }: { groups: NavGroup[] }) {
                 </SidebarMenuItem>
             </SidebarMenu>
 
-            <SidebarGroup>
+            <SidebarGroup className='px-0'>
                 {visibleGroups.map((group) => (
                     <div key={group.title}>
                         <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
 
-                        <SidebarMenu>
+                        <SidebarMenu className=''>
                             {group.items.map((item) => (
                                 <Collapsible
                                     key={item.title}

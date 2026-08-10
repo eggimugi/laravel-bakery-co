@@ -1,5 +1,6 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 import AppLogo from '@/components/app-logo';
+import { Container } from '@/components/container';
 import { useRole } from '@/hooks/use-role';
 import { dashboard, login } from '@/routes';
 import { create } from '@/routes/orders';
@@ -7,27 +8,28 @@ import { create } from '@/routes/orders';
 export default function Welcome() {
     const { auth } = usePage().props;
     const { hasRole } = useRole();
-    
-        const homeHref = hasRole('owner') || hasRole('manager') ? dashboard() : create();
+
+    const homeHref =
+        hasRole('owner') || hasRole('manager') ? dashboard() : create();
 
     return (
         <>
             <Head title="Welcome" />
-            <div className="flex min-h-screen flex-col items-center lg:justify-center lg:p-8">
+            <Container className="flex min-h-screen flex-col items-center lg:justify-center p-8 bg-background">
                 <header className="mb-6 w-full text-sm not-has-[nav]:hidden">
-                    <nav className="flex items-center justify-end gap-4">
+                    <nav className="flex items-center justify-end">
                         {auth.user ? (
                             <Link
                                 href={homeHref}
-                                className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
+                                className="rounded-sm bg-primary text-center font-medium px-5 py-1.5 text-sm"
                             >
-                                {hasRole('owner') || hasRole('manager') ? 'Dashboard' : 'Orders'}
+                                Dashboard
                             </Link>
                         ) : (
                             <>
                                 <Link
                                     href={login()}
-                                    className="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]"
+                                    className="rounded-sm bg-primary text-center font-medium px-5 py-1.5 text-sm"
                                 >
                                     Log in
                                 </Link>
@@ -35,29 +37,26 @@ export default function Welcome() {
                         )}
                     </nav>
                 </header>
-                <main className="flex w-full flex-col items-center justify-center gap-16 opacity-100 transition-opacity duration-750 lg:grow starting:opacity-0">
-                    <div className="space-y-8">
-                        <h1 className="flex items-center justify-center gap-2">
-                            <AppLogo />
-                        </h1>
-                        <p className="text-center text-6xl lg:max-w-3xl">
+                <main className="flex-1 flex w-full h-full flex-col items-center justify-evenly sm:justify-center gap-25 opacity-100 transition-opacity duration-1500 starting:opacity-0">
+                    <div className="space-y-8 sm:space-y-5 text-secondary">
+                        <AppLogo />
+                        <p className="text-center text-5xl sm:text-7xl font-extrabold lg:max-w-4xl">
                             Crafted by Hand, Baked with{' '}
                             <span className="italic">Lovely</span> Heart!
                         </p>
-                        <p className="text-center text-lg text-muted-foreground">
+                        <p className="text-center text-lg">
                             Every loaf, pastry, and dessert is carefully
                             prepared using premium ingredients and baked fresh
                             daily.
                         </p>
                     </div>
                     <img
-                        src="/bakery.svg"
+                        src="/welcome-decoration.svg"
                         alt="Bakery"
                         className="w-full max-w-md invert dark:invert-0"
                     />
                 </main>
-                <div className="hidden h-14.5 lg:block"></div>
-            </div>
+            </Container>
         </>
     );
 }

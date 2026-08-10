@@ -11,7 +11,7 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
-import { create, destroy, edit, index } from '@/routes/compositions';
+import { create, destroy, edit, index, show } from '@/routes/compositions';
 import type { CakeWithCompositions } from '@/types';
 import { CompositionsStatsHeader } from './components/composition-stats-header';
 
@@ -37,32 +37,22 @@ export default function ShowComposition({ cake, stats }: Props) {
                     <CardHeader className="col-span-2">
                         <CardTitle className="text-2xl font-bold capitalize">
                             {cake.cake_name}
+                            <CardDescription className="font-normal capitalize">
+                                {cake.cake_flavour}
+                            </CardDescription>
                         </CardTitle>
 
                         <img
                             src="/cake-placeholder.png"
                             alt="Event cover"
-                            className="mx-auto h-56 w-full object-contain"
+                            className="h-56 object-contain"
                         />
-
-                        <CardDescription className="text-base text-primary">
-                            <p className="capitalize">
-                                <span className="font-semibold">Flavour:</span>{' '}
-                                {cake.cake_flavour}
-                            </p>
-                            <p className="capitalize">
-                                <span className="font-semibold">Stock:</span>{' '}
-                                {cake.stock}{' '}
-                                <span className="capitalize">
-                                    {cake.unit}
-                                </span>{' '}
-                            </p>
-                        </CardDescription>
 
                         <div className="mt-6 flex items-center gap-4">
                             {hasCompositions ? (
                                 <>
                                     <Button
+                                        variant="secondary"
                                         onClick={() =>
                                             router.visit(edit(cake.id))
                                         }
@@ -70,6 +60,7 @@ export default function ShowComposition({ cake, stats }: Props) {
                                         Edit Composition
                                     </Button>
                                     <Button
+                                        variant="secondary"
                                         onClick={() =>
                                             router.delete(destroy(cake.id), {
                                                 onSuccess: () => {
@@ -83,7 +74,8 @@ export default function ShowComposition({ cake, stats }: Props) {
                                         Delete Composition
                                     </Button>
                                     <Button
-                                        onClick={() => router.visit(index())}
+                                        variant="secondary"
+                                        onClick={() => window.history.back()}
                                     >
                                         Back
                                     </Button>
@@ -91,6 +83,7 @@ export default function ShowComposition({ cake, stats }: Props) {
                             ) : (
                                 <>
                                     <Button
+                                        variant='secondary'
                                         onClick={() =>
                                             router.visit(create(cake.id))
                                         }
@@ -98,17 +91,17 @@ export default function ShowComposition({ cake, stats }: Props) {
                                         Add Composition
                                     </Button>
                                     <Button
-                                        variant="outline"
-                                        onClick={() => router.visit(index())}
+                                        variant='secondary'
+                                        onClick={() => window.history.back()}
                                     >
-                                        Cancel
+                                        Back
                                     </Button>
                                 </>
                             )}
                         </div>
                     </CardHeader>
 
-                    <CardContent className="col-span-3 space-y-6">
+                    <CardContent className="col-span-3 space-y-6 pl-0">
                         <h2 className="text-xl font-semibold">Ingredients</h2>
 
                         {hasCompositions ? (
@@ -116,10 +109,15 @@ export default function ShowComposition({ cake, stats }: Props) {
                                 {cake.compositions.map((comp) => (
                                     <Card
                                         key={comp.id}
-                                        className="px-4 capitalize"
+                                        className="gap-0 bg-secondary px-4 py-4 leading-tight text-background capitalize"
                                     >
-                                        {comp.quantity} {comp.material?.unit} -{' '}
-                                        {comp.material?.material_name}
+                                        <p>
+                                            {comp.quantity}{' '}
+                                            {comp.material?.unit}
+                                        </p>
+                                        <p className="text-muted">
+                                            {comp.material?.material_name}
+                                        </p>
                                     </Card>
                                 ))}
                             </div>
@@ -145,11 +143,10 @@ ShowComposition.layout = function Layout({
     return (
         <AppLayout
             breadcrumbs={[
-                { title: 'Cakes', href: '/cakes' },
-                { title: 'Compositions', href: `/compositions` },
+                { title: 'Compositions', href: index() },
                 {
                     title: cake.cake_name,
-                    href: `/compositions/show-composition/${cake.id}`,
+                    href: show(cake.id),
                 },
             ]}
         >

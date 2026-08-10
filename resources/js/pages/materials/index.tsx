@@ -28,19 +28,22 @@ export default function Materials({
             <Container>
                 <MaterialStatsHeader stats={stats} />
 
-                <div className="space-y-6">
+                <div className="space-y-4">
                     <h2 className="text-lg font-medium">
                         Stock is Running Low
                     </h2>
 
                     {lessStockMaterials.length === 0 ? (
-                        <p className="border text-center text-sm text-muted-foreground p-6">
+                        <p className="rounded-xl border p-6 text-center text-sm text-muted">
                             No materials are running low on stock.
                         </p>
                     ) : (
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
                             {lessStockMaterials.map((material) => (
-                                <MaterialStockCard key={material.id} material={material} />
+                                <MaterialStockCard
+                                    key={material.id}
+                                    material={material}
+                                />
                             ))}
                         </div>
                     )}

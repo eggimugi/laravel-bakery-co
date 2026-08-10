@@ -10,25 +10,25 @@ type Props = {
 export default function StaffCard({ staff }: Props) {
     return (
         <>
-            <Card className="gap-4">
+            <Card className="gap-4 bg-background/30 text-background">
                 <CardContent className="space-y-2">
                     <div className="flex items-center justify-between">
-                        <p className="font-semibold">{staff.name}</p>
+                        <div className="flex flex-col leading-tight">
+                            <p className="font-semibold">{staff.name}</p>
+                            <p className="capitalize">
+                                {staff.roles?.[0]?.name || 'No Role'}
+                            </p>
+                        </div>
 
                         <Badge className="capitalize">
                             {staff.orders_count} Orders
                         </Badge>
                     </div>
 
-                    <CardDescription className="space-y-1">
-                        <p className="capitalize">
-                            {staff.roles?.[0]?.name || 'No Role'}
-                        </p>
-
+                    <CardDescription className="leading-tight text-background/80">
                         <p>{staff.email}</p>
 
                         <p>
-                            <span className="font-medium">Joined Date: </span>
                             {formatDate(staff.created_at)}
                         </p>
                     </CardDescription>

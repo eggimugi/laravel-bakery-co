@@ -4,11 +4,10 @@ import { Card, CardContent, CardHeader } from './ui/card';
 type Props = {
     icon: React.ReactNode;
     title: string;
-    description: string;
     onClick: () => void;
 };
 
-export function QuickActionCard({ icon, title, description, onClick }: Props) {
+export function QuickActionCard({ icon, title, onClick }: Props) {
     return (
         <Link
             href="#"
@@ -18,20 +17,17 @@ export function QuickActionCard({ icon, title, description, onClick }: Props) {
             }}
             className="block h-full"
         >
-            <Card className="flex h-full flex-col items-center justify-center text-center">
+            <Card className="flex h-full flex-col items-center justify-center text-center gap-3 bg-background/30 text-background">
                 <CardHeader>
-                    <div className="flex h-10 w-10 items-center justify-center text-muted-foreground">
+                    <div className="flex h-7 w-7 items-center justify-center [&>svg]:h-20 [&>svg]:w-20">
                         {icon}
                     </div>
                 </CardHeader>
                 <CardContent className="flex flex-1 flex-col justify-center text-center">
                     <div className="space-y-1">
-                        <h3 className="text-sm leading-none font-medium">
+                        <h3 className="leading-none font-medium">
                             {title}
                         </h3>
-                        <p className="text-sm text-muted-foreground">
-                            {description}
-                        </p>
                     </div>
                 </CardContent>
             </Card>

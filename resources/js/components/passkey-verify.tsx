@@ -44,7 +44,7 @@ export default function PasskeyVerify({
             <div className="grid gap-2">
                 <Button
                     type="button"
-                    variant="outline"
+                    variant="secondary"
                     className="w-full"
                     onClick={verify}
                     disabled={isLoading}
@@ -59,7 +59,7 @@ export default function PasskeyVerify({
                 )}
             </div>
 
-            <div className="relative my-6">
+            <div className="relative my-4">
                 <div className="absolute inset-0 flex items-center">
                     <Separator className="w-full" />
                 </div>

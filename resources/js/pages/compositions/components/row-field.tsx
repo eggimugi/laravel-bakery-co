@@ -32,6 +32,7 @@ export function CompositionRowField({ row, materials, error, canRemove, onChange
                         onChange({ material_name: e.target.value, material_id: matched?.id ?? null });
                     }}
                     autoComplete="off"
+                    className="capitalize"
                 />
                 {row.material_name && !row.material_id && (
                     <p className="text-sm text-destructive">Material not found.</p>

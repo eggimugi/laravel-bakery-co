@@ -1,4 +1,4 @@
-import { router } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import {
     Users,
     CakeSlice,
@@ -17,7 +17,6 @@ import {
     SidebarFooter,
     SidebarHeader,
     SidebarMenu,
-    SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { useRole } from '@/hooks/use-role';
@@ -179,15 +178,14 @@ export function AppSidebar() {
 
     return (
         <Sidebar collapsible="icon" variant="inset">
-            <SidebarHeader>
+            <SidebarHeader className='pt-4'>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton
-                            size="lg"
-                            onClick={() => router.visit(homeHref)}
+                        <Link
+                            href={homeHref}
                         >
-                            <AppLogo />
-                        </SidebarMenuButton>
+                            <AppLogo className='text-start'/>
+                        </Link>
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>

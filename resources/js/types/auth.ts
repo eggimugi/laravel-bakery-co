@@ -17,7 +17,7 @@ export type User = {
 };
 
 export type Auth = {
-    user: User | null;
+    user: User ;
 };
 
 /* @chisel-passkeys */

@@ -1,5 +1,6 @@
 import type { InertiaLinkProps } from '@inertiajs/react';
 import type { LucideIcon } from 'lucide-react';
+import type { RouteDefinition } from '@/wayfinder';
 
 export type BreadcrumbItem = {
     title: string;
@@ -12,14 +13,25 @@ type NavItemChildren = {
     permission: string;
 };
 
-export type NavItem = {
+type NavItemBase = {
     title: string;
     icon?: LucideIcon | null;
-    children: NavItemChildren[];
     isActive?: boolean;
 };
 
+export type NavItemLink = NavItemBase & {
+    href: RouteDefinition<'get'> | NonNullable<InertiaLinkProps['href']>;
+    children?: never;
+};
+
+export type NavItemGroup = NavItemBase & {
+    href?: never;
+    children: NavItemChildren[];
+};
+
+export type NavItem = NavItemLink | NavItemGroup;
+
 export type NavGroup = {
     title: string;
-    items: NavItem[];
+    items: NavItemGroup[];
 };

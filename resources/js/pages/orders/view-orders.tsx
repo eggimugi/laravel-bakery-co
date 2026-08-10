@@ -1,8 +1,10 @@
 import { Head, InfiniteScroll, router } from '@inertiajs/react';
 import { SlidersVertical } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { Container } from '@/components/container';
+import { SearchInput } from '@/components/search-input';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { usePermission } from '@/hooks/use-permission';
 import { create, index } from '@/routes/orders';
 import type { Order } from '@/types';
 import { OrderCard } from './components/order-card';
@@ -14,6 +16,7 @@ type Paginated<T> = {
 
 type Props = {
     orders: Paginated<Order>;
+    filters?: { search?: string };
     stats: {
         totalOrder: number;
         completed: number;
@@ -22,6 +25,33 @@ type Props = {
 };
 
 export default function ViewOrders({ orders, stats }: Props) {
+    const { can } = usePermission();
+    const [search, setSearch] = useState('');
+    const [filter, setFilter] = useState<
+        'all' | 'processing' | 'completed' | 'highest' | 'newest' | 'latest'
+    >('all');
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            router.get(
+                index().url,
+                {
+                    search: search || undefined,
+                    filter: filter !== 'all' ? filter : undefined,
+                },
+                {
+                    preserveState: true,
+                    preserveScroll: false,
+                    replace: true,
+                    only: ['orders', 'filters', 'stats'],
+                    reset: ['orders'],
+                },
+            );
+        }, 400);
+
+        return () => clearTimeout(timeout);
+    }, [search, filter]);
+
     return (
         <>
             <Head title={'Orders'} />
@@ -30,11 +60,13 @@ export default function ViewOrders({ orders, stats }: Props) {
                     <div className="min-w-0 flex-1">
                         <ViewOrderStats stats={stats} />
 
-                        <div className="sticky top-16 z-20 space-y-4 bg-background py-4">
+                        <div className="sticky top-16 z-20 space-y-8 bg-secondary py-8">
                             <div className="flex items-center gap-6">
-                                <Input
+                                <SearchInput
                                     placeholder="Search..."
                                     className="w-full"
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
                                 />
 
                                 <div className="flex items-center gap-6">
@@ -51,20 +83,90 @@ export default function ViewOrders({ orders, stats }: Props) {
                             </div>
 
                             <div className="flex flex-wrap items-center gap-4">
-                                <Button variant="outline" size="default">
+                                <Button
+                                    variant={
+                                        filter === 'processing'
+                                            ? 'default'
+                                            : 'outline'
+                                    }
+                                    size="default"
+                                    onClick={() =>
+                                        setFilter(
+                                            filter === 'processing'
+                                                ? 'all'
+                                                : 'processing',
+                                        )
+                                    }
+                                >
                                     Processing
                                 </Button>
-                                <Button variant="outline" size="default">
+                                <Button
+                                    variant={
+                                        filter === 'completed'
+                                            ? 'default'
+                                            : 'outline'
+                                    }
+                                    size="default"
+                                    onClick={() =>
+                                        setFilter(
+                                            filter === 'completed'
+                                                ? 'all'
+                                                : 'completed',
+                                        )
+                                    }
+                                >
                                     Completed
                                 </Button>
-                                <Button variant="default" size="default">
+                                <Button
+                                    variant={
+                                        filter === 'highest'
+                                            ? 'default'
+                                            : 'outline'
+                                    }
+                                    size="default"
+                                    onClick={() =>
+                                        setFilter(
+                                            filter === 'highest'
+                                                ? 'all'
+                                                : 'highest',
+                                        )
+                                    }
+                                >
                                     Highest Total
                                 </Button>
-                                <Button variant="outline" size="default">
-                                    Latest
-                                </Button>
-                                <Button variant="outline" size="default">
+                                <Button
+                                    variant={
+                                        filter === 'newest'
+                                            ? 'default'
+                                            : 'outline'
+                                    }
+                                    size="default"
+                                    onClick={() =>
+                                        setFilter(
+                                            filter === 'newest'
+                                                ? 'all'
+                                                : 'newest',
+                                        )
+                                    }
+                                >
                                     Newest
+                                </Button>
+                                <Button
+                                    variant={
+                                        filter === 'latest'
+                                            ? 'default'
+                                            : 'outline'
+                                    }
+                                    size="default"
+                                    onClick={() =>
+                                        setFilter(
+                                            filter === 'latest'
+                                                ? 'all'
+                                                : 'latest',
+                                        )
+                                    }
+                                >
+                                    Latest
                                 </Button>
                             </div>
                         </div>
@@ -72,11 +174,11 @@ export default function ViewOrders({ orders, stats }: Props) {
                         <InfiniteScroll data="orders">
                             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 2xl:grid-cols-3">
                                 {orders.data.map((order) => (
-                                    <div key={order.id} className='h-full'>
+                                    <div key={order.id} className="h-full">
                                         <OrderCard
                                             key={order.id}
                                             order={order}
-                                            canManageOrder={true}
+                                            canManageOrder={can('order.update')}
                                         />
                                     </div>
                                 ))}

@@ -16,7 +16,7 @@ export function MaterialStatsHeader({ stats }: Props) {
                 <h1 className="text-2xl font-bold">
                     Manage BakeryCo. Materials
                 </h1>
-                <p className="text-muted-foreground">
+                <p className="text-muted">
                     Manage your bakery materials and their details.
                 </p>
             </div>

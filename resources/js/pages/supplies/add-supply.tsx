@@ -1,4 +1,4 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
 import { Container } from '@/components/container';
@@ -33,7 +33,7 @@ export default function AddSupply({ suppliers, materials, stats }: Props) {
         addRow,
         removeRow,
         post,
-        reset
+        reset,
     } = useAddSupply();
 
     const submit = (e: React.FormEvent) => {
@@ -41,7 +41,7 @@ export default function AddSupply({ suppliers, materials, stats }: Props) {
         post(store.url(), {
             onSuccess: () => {
                 toast.success('Supply added successfully');
-                reset()
+                reset();
             },
         });
     };
@@ -72,60 +72,64 @@ export default function AddSupply({ suppliers, materials, stats }: Props) {
 
                 <form
                     onSubmit={submit}
-                    className="w-full rounded-xl border p-4"
+                    className="w-full rounded-xl border p-6"
                 >
                     <FormHeader
                         title={`Add supply for BakeryCo.`}
                         description="Add a new supply for your bakery. Fill in the details below to add materials and their quantities."
                     />
 
-                    <div className="grid gap-6">
-                        <FormField
-                            id="supplier"
-                            label="Supplier"
-                            error={errors.supplier_id}
-                        >
-                            <Input
+                    <div className="grid gap-4">
+                        <div className="grid grid-cols-2 gap-4">
+                            <FormField
                                 id="supplier"
-                                type="text"
-                                required
-                                tabIndex={1}
-                                placeholder="Supplier name"
-                                list="supplier-suggestions"
-                                value={data.supplier_name}
-                                onChange={(e) => {
-                                    const value = e.target.value;
-                                    const matched = suppliers.find(
-                                        (s) =>
-                                            s.supplier_name.toLowerCase() ===
-                                            e.target.value.trim().toLowerCase(),
-                                    );
-                                    setData((prev) => ({
-                                        ...prev,
-                                        supplier_name: value,
-                                        supplier_id: matched?.id ?? null,
-                                    }));
-                                }}
-                            />
-                        </FormField>
+                                label="Supplier"
+                                error={errors.supplier_id}
+                            >
+                                <Input
+                                    id="supplier"
+                                    type="text"
+                                    required
+                                    tabIndex={1}
+                                    placeholder="Supplier name"
+                                    list="supplier-suggestions"
+                                    value={data.supplier_name}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        const matched = suppliers.find(
+                                            (s) =>
+                                                s.supplier_name.toLowerCase() ===
+                                                e.target.value
+                                                    .trim()
+                                                    .toLowerCase(),
+                                        );
+                                        setData((prev) => ({
+                                            ...prev,
+                                            supplier_name: value,
+                                            supplier_id: matched?.id ?? null,
+                                        }));
+                                    }}
+                                />
+                            </FormField>
 
-                        <FormField
-                            id="supply_date"
-                            label="Supply Date"
-                            error={errors.supply_date}
-                        >
-                            <Input
+                            <FormField
                                 id="supply_date"
-                                type="date"
-                                required
-                                tabIndex={2}
-                                placeholder="Input a date"
-                                value={data.supply_date}
-                                onChange={(e) =>
-                                    setData('supply_date', e.target.value)
-                                }
-                            />
-                        </FormField>
+                                label="Supply Date"
+                                error={errors.supply_date}
+                            >
+                                <Input
+                                    id="supply_date"
+                                    type="date"
+                                    required
+                                    tabIndex={2}
+                                    placeholder="Input a date"
+                                    value={data.supply_date}
+                                    onChange={(e) =>
+                                        setData('supply_date', e.target.value)
+                                    }
+                                />
+                            </FormField>
+                        </div>
 
                         <div className="grid gap-6">
                             <div className="grid gap-3">
@@ -180,12 +184,13 @@ export default function AddSupply({ suppliers, materials, stats }: Props) {
                                     {processing && <Spinner />}
                                     Add Supply
                                 </Button>
-                                <Link
-                                    href={suppliesIndex()}
-                                    className="text-sm text-muted-foreground hover:underline"
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => window.history.back()}
                                 >
                                     Cancel
-                                </Link>
+                                </Button>
                             </div>
                         </div>
                     </div>

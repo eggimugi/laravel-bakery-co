@@ -1,10 +1,10 @@
-import { Head, InfiniteScroll, router } from '@inertiajs/react';
+import { Head, InfiniteScroll, router, usePage } from '@inertiajs/react';
 import { ShoppingBasket, SlidersVertical } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { Container } from '@/components/container';
+import { SearchInput } from '@/components/search-input.tsx';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils.ts';
 import { index, store } from '@/routes/orders';
 import type { Cake } from '@/types';
@@ -27,16 +27,29 @@ type Props = {
 };
 
 export default function Order({ cakes, stats }: Props) {
-    const [isCartOpen, setIsCartOpen] = useState(false);
+    const isOpen = usePage().props.cartOpen;
+    const [isCartOpen, setIsCartOpen] = useState(isOpen);
     const [isCheckingOut, setIsCheckingOut] = useState(false);
     const { cart, addToCart, increaseQty, decreaseQty, getQty, totalQty } =
         useCart();
+    const prevTotalQty = useRef(totalQty);
+
+    useEffect(() => {
+        if (prevTotalQty.current === 0 && totalQty > 0) {
+            setIsCartOpen(true);
+        }
+
+        prevTotalQty.current = totalQty;
+    }, [totalQty]);
 
     const toggleCart = () => {
-        setIsCartOpen((currentOpen) => !currentOpen);
-    };
+        setIsCartOpen((currentOpen) => {
+            const next = !currentOpen;
+            document.cookie = `cart_state=${next}; path=/; max-age=${60 * 60 * 24 * 7}`; // 7 hari
 
-    console.log(isCheckingOut);
+            return next;
+        });
+    };
 
     const handleCheckout = () => {
         const items = Object.values(cart).map(({ cake, qty }) => ({
@@ -67,14 +80,14 @@ export default function Order({ cakes, stats }: Props) {
     return (
         <>
             <Head title={'Order'} />
-            <Container className="pt-0">
+            <Container className="">
                 <div className="flex w-full flex-col lg:flex-row">
                     <div className="min-w-0 flex-1">
                         <AddOrderStats stats={stats} />
 
-                        <div className="sticky top-16 space-y-4 bg-background py-4">
+                        <div className="sticky top-16 space-y-6 bg-secondary py-8">
                             <div className="flex items-center gap-6">
-                                <Input
+                                <SearchInput
                                     placeholder="Search..."
                                     className="w-full"
                                 />
@@ -104,7 +117,7 @@ export default function Order({ cakes, stats }: Props) {
                                             size="default"
                                         >
                                             <ShoppingBasket />
-                                            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] leading-none font-semibold text-primary-foreground">
+                                            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] leading-none font-semibold text-background">
                                                 {totalQty}
                                             </span>
                                         </Button>
@@ -160,6 +173,7 @@ export default function Order({ cakes, stats }: Props) {
                         decreaseQty={decreaseQty}
                         increaseQty={increaseQty}
                         onCheckout={handleCheckout}
+                        isCheckingOut={isCheckingOut}
                         open={isCartOpen}
                         totalQty={totalQty}
                     />

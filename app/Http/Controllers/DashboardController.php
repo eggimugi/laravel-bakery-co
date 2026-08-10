@@ -13,7 +13,7 @@ class DashboardController extends Controller
     {
         $popularCakes = Cake::withCount('detailOrders as orders_count')
             ->orderByDesc('orders_count')
-            ->take(6)
+            ->take(5)
             ->get();
 
         $topStaff = User::role(['manager', 'cashier'])

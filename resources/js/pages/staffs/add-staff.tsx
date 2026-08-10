@@ -1,5 +1,4 @@
 import { Form, Head } from '@inertiajs/react';
-import { Link } from '@inertiajs/react';
 import { toast } from 'sonner';
 import { Container } from '@/components/container';
 import InputError from '@/components/form/input-error';
@@ -15,7 +14,6 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Spinner } from '@/components/ui/spinner';
-import { index as staffsIndex } from '@/routes/staffs';
 import { store } from '@/routes/staffs';
 import { StaffStatsHeader } from './components/staff-stats-header';
 
@@ -43,7 +41,7 @@ export default function AddStaff({ passwordRules, stats }: Props) {
                     }}
                     resetOnSuccess
                     disableWhileProcessing
-                    className="w-full rounded-xl border p-4"
+                    className="w-full rounded-xl border p-6"
                 >
                     {({ processing, errors }) => (
                         <>
@@ -51,60 +49,68 @@ export default function AddStaff({ passwordRules, stats }: Props) {
                                 <h1 className="text-2xl font-bold">
                                     Add Staff
                                 </h1>
-                                <p className="text-muted-foreground">
+                                <p className="text-muted">
                                     Create a new staff account for your bakery.
                                 </p>
                             </div>
 
-                            <div className="grid gap-6">
-                                <div className="grid gap-2">
-                                    <Label htmlFor="name">Name</Label>
-                                    <Input
-                                        id="name"
-                                        type="text"
-                                        required
-                                        autoFocus
-                                        tabIndex={1}
-                                        autoComplete="name"
-                                        name="name"
-                                        placeholder="Full name"
-                                    />
-                                    <InputError message={errors.name} />
-                                </div>
+                            <div className="grid gap-4">
+                                <div className="grid grid-cols-3 gap-4">
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="name">Name</Label>
+                                        <Input
+                                            id="name"
+                                            type="text"
+                                            required
+                                            autoFocus
+                                            tabIndex={1}
+                                            autoComplete="name"
+                                            name="name"
+                                            placeholder="Full name"
+                                        />
+                                        <InputError message={errors.name} />
+                                    </div>
 
-                                <div className="grid gap-2">
-                                    <Label htmlFor="email">Email address</Label>
-                                    <Input
-                                        id="email"
-                                        type="email"
-                                        required
-                                        tabIndex={2}
-                                        autoComplete="email"
-                                        name="email"
-                                        placeholder="email@example.com"
-                                    />
-                                    <InputError message={errors.email} />
-                                </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="email">
+                                            Email address
+                                        </Label>
+                                        <Input
+                                            id="email"
+                                            type="email"
+                                            required
+                                            tabIndex={2}
+                                            autoComplete="email"
+                                            name="email"
+                                            placeholder="email@example.com"
+                                        />
+                                        <InputError message={errors.email} />
+                                    </div>
 
-                                <div className="grid gap-2">
-                                    <Label htmlFor="role">Role</Label>
-                                    <Select name="role">
-                                        <SelectTrigger id="role" tabIndex={3}>
-                                            <SelectValue placeholder="Select a role" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="owner">
-                                                Owner
-                                            </SelectItem>
-                                            <SelectItem value="manager">
-                                                Manager
-                                            </SelectItem>
-                                            <SelectItem value="cashier">
-                                                Cashier
-                                            </SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                    <InputError message={errors.role} />
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="role">Role</Label>
+                                        <Select name="role">
+                                            <SelectTrigger
+                                                id="role"
+                                                tabIndex={3}
+                                                className="w-full"
+                                            >
+                                                <SelectValue placeholder="Select a role" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="owner">
+                                                    Owner
+                                                </SelectItem>
+                                                <SelectItem value="manager">
+                                                    Manager
+                                                </SelectItem>
+                                                <SelectItem value="cashier">
+                                                    Cashier
+                                                </SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                        <InputError message={errors.role} />
+                                    </div>
                                 </div>
 
                                 <div className="grid gap-2">
@@ -139,7 +145,7 @@ export default function AddStaff({ passwordRules, stats }: Props) {
                                     />
                                 </div>
 
-                                <div className="flex items-center gap-3 pt-2">
+                                <div className="flex items-center gap-4 pt-2">
                                     <Button
                                         type="submit"
                                         tabIndex={6}
@@ -148,13 +154,13 @@ export default function AddStaff({ passwordRules, stats }: Props) {
                                         {processing && <Spinner />}
                                         Create staff
                                     </Button>
-                                    <Link
-                                        href={staffsIndex()}
-                                        tabIndex={7}
-                                        className="text-sm text-muted-foreground hover:underline"
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        onClick={() => window.history.back()}
                                     >
                                         Cancel
-                                    </Link>
+                                    </Button>
                                 </div>
                             </div>
                         </>

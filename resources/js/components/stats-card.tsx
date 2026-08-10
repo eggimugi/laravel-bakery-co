@@ -14,7 +14,7 @@ export function StatsCard({ title, value, unitValue, className }: Props) {
             <p className="text-2xl font-bold">
                 {value}
                 {unitValue && (
-                    <span className="text-sm font-normal text-muted-foreground">
+                    <span className="text-sm font-normal text-muted">
                         {' '}
                         /{unitValue}
                     </span>

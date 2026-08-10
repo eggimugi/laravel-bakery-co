@@ -21,9 +21,11 @@ class CakeController extends Controller
     public function create()
     {
         $cakes = Cake::all();
+        $lessStockCakes = Cake::where('stock', '<=', 3)->count();
 
         return Inertia::render('cakes/add-cake', [
             'cakes' => $cakes,
+            'lessStockCakes' => $lessStockCakes,
         ]);
     }
 
@@ -46,10 +48,12 @@ class CakeController extends Controller
     public function edit(Cake $cake)
     {
         $totalCakes = Cake::count();
+        $lessStockCakes = Cake::where('stock', '<=', 3)->count();
 
         return Inertia::render('cakes/edit-cake', [
             'cake' => $cake,
             'totalCakes' => $totalCakes,
+            'lessStockCakes' => $lessStockCakes,
         ]);
     }
 

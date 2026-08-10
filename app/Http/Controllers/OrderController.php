@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Order\StoreRequest;
-use App\Http\Requests\Order\UpdateRequest;
 use App\Models\Cake;
+use App\Models\DetailOrder;
 use App\Models\Order;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
@@ -15,9 +15,30 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::with(['user', 'detailOrders.cake'])->paginate();
+        $orders = Order::with(['user', 'detailOrders.cake'])
+            ->when($request->search, function ($query, $search) {
+                $query->whereHas('detailOrders.cake', function ($q) use ($search) {
+                    $q->where('cake_name', 'like', "%{$search}%");
+                });
+            })
+            ->when($request->filter, function ($query, $filter) {
+                match ($filter) {
+                    'newest' => $query->orderBy('order_date', 'desc'),
+                    'latest' => $query->orderBy('order_date', 'asc'),
+                    'completed' => $query->where('status', 'completed'),
+                    'processing' => $query->where('status', 'processing'),
+                    'highest' => $query->orderByDesc(
+                        DetailOrder::selectRaw('COALESCE(SUM(cakes.cake_price * detail_orders.quantity), 0)')
+                            ->join('cakes', 'cakes.id', '=', 'detail_orders.cake_id')
+                            ->whereColumn('detail_orders.order_id', 'orders.id')
+                    )->orderBy('id', 'desc'),
+                    default => null,
+                };
+            })
+            ->paginate(6)
+            ->withQueryString();
 
         $stats = [
             'totalOrder' => Order::count(),
@@ -26,7 +47,8 @@ class OrderController extends Controller
         ];
 
         return Inertia::render('orders/view-orders', [
-            'orders' => Inertia::scroll(fn () => $orders),
+            'orders' => Inertia::scroll($orders),
+            'filters' => $request->only(['search', 'filter']),
             'stats' => $stats,
         ]);
     }

@@ -1,9 +1,11 @@
-import { Form, Head, Link } from '@inertiajs/react';
+import { Form, Head } from '@inertiajs/react';
+import { useState } from 'react';
 import type { ReactNode } from 'react';
 import { toast } from 'sonner';
 import { Container } from '@/components/container';
 import { FormField } from '@/components/form/form-field';
 import { FormHeader } from '@/components/form/form-header';
+import { NumberInput } from '@/components/form/number-input';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
@@ -23,6 +25,8 @@ type Props = {
 };
 
 export default function EditProduction({ production, stats }: Props) {
+    const [quantity, setQuantity] = useState<number | ''>(production.quantity);
+
     return (
         <>
             <Head title={`Edit Production - ${production.cake?.cake_name}`} />
@@ -34,16 +38,16 @@ export default function EditProduction({ production, stats }: Props) {
                     onSuccess={() =>
                         toast.success('Production updated successfully.')
                     }
-                    className="mt-10 w-full rounded-xl border p-4"
+                    className="w-full rounded-xl border p-6"
                 >
                     {({ processing, errors }) => (
                         <>
                             <FormHeader
-                                title={`Edit Production - ${production.cake?.cake_name}`}
+                                title={`Edit Production ${production.cake?.cake_name}`}
                                 description="Update the production information."
                             />
 
-                            <div className="grid gap-6">
+                            <div className="grid grid-cols-3 gap-4">
                                 <FormField
                                     id="cake_name"
                                     label="Cake Name"
@@ -58,6 +62,7 @@ export default function EditProduction({ production, stats }: Props) {
                                         placeholder="Cake name"
                                         value={production.cake?.cake_name}
                                         disabled
+                                        className="capitalize"
                                     />
                                 </FormField>
 
@@ -72,15 +77,16 @@ export default function EditProduction({ production, stats }: Props) {
                                     label="Quantity"
                                     error={errors.quantity}
                                 >
-                                    <Input
+                                    <NumberInput
                                         id="quantity"
-                                        type="number"
+                                        name="quantity"
                                         required
                                         tabIndex={2}
                                         placeholder="Quantity"
-                                        defaultValue={production.quantity}
-                                        min={1}
-                                        name="quantity"
+                                        min={0}
+                                        clampOnBlur={false}
+                                        value={quantity}
+                                        onValueChange={setQuantity}
                                     />
                                 </FormField>
 
@@ -95,15 +101,16 @@ export default function EditProduction({ production, stats }: Props) {
                                         required
                                         tabIndex={3}
                                         placeholder="Production date"
-                                        defaultValue={
-                                            production.production_date
-                                        }
+                                        defaultValue={production.production_date?.slice(
+                                            0,
+                                            10,
+                                        )}
                                         name="production_date"
                                     />
                                 </FormField>
                             </div>
 
-                            <div className="mt-6 flex items-center justify-end gap-2">
+                            <div className="mt-6 flex items-center gap-4">
                                 <Button
                                     type="submit"
                                     disabled={processing}
@@ -115,12 +122,13 @@ export default function EditProduction({ production, stats }: Props) {
                                     Update Production
                                 </Button>
 
-                                <Link
-                                    href={index()}
-                                    className="text-sm text-muted-foreground hover:underline"
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => window.history.back()}
                                 >
                                     Cancel
-                                </Link>
+                                </Button>
                             </div>
                         </>
                     )}

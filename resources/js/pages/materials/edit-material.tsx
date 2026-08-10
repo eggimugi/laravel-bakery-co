@@ -1,10 +1,10 @@
 import { Form, Head } from '@inertiajs/react';
+import type { ReactNode } from 'react';
 import { toast } from 'sonner';
 import { Container } from '@/components/container';
-import InputError from '@/components/form/input-error';
+import { FormField } from '@/components/form/form-field';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import {
     Select,
     SelectContent,
@@ -13,7 +13,8 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Spinner } from '@/components/ui/spinner';
-import { update } from '@/routes/materials';
+import AppLayout from '@/layouts/app-layout';
+import { edit, index, update } from '@/routes/materials';
 import type { Material } from '@/types';
 import { MaterialStatsHeader } from './components/material-stats-header';
 
@@ -39,24 +40,25 @@ export default function EditMaterial({ material, stats }: Props) {
                     onSuccess={() =>
                         toast.success('Material updated successfully!')
                     }
-                    className="mt-10 w-full rounded-xl border p-4"
+                    className="w-full rounded-xl border p-6"
                 >
                     {({ processing, errors }) => (
                         <>
-                            <div className="mb-6">
+                            <div className="mb-4">
                                 <h1 className="text-2xl font-bold">
                                     Edit Material
                                 </h1>
-                                <p className="text-muted-foreground">
+                                <p className="text-muted">
                                     Update the material information.
                                 </p>
                             </div>
 
-                            <div className="grid gap-6">
-                                <div className="grid gap-2">
-                                    <Label htmlFor="material_name">
-                                        Material Name
-                                    </Label>
+                            <div className="grid grid-cols-3 gap-4">
+                                <FormField
+                                    id="material_name"
+                                    label="Material Name"
+                                    error={errors.material_name}
+                                >
                                     <Input
                                         id="material_name"
                                         type="text"
@@ -66,84 +68,80 @@ export default function EditMaterial({ material, stats }: Props) {
                                         name="material_name"
                                         placeholder="Material name"
                                         defaultValue={material.material_name}
+                                        className='capitalize'
                                     />
-                                    <InputError
-                                        message={errors.material_name}
-                                    />
-                                </div>
+                                </FormField>
+
+                                <FormField
+                                    id="unit"
+                                    label="Unit"
+                                    error={errors.unit}
+                                >
+                                    <Select
+                                        name="unit"
+                                        defaultValue={material.unit}
+                                    >
+                                        <SelectTrigger
+                                            id="unit"
+                                            tabIndex={2}
+                                            className="w-full"
+                                        >
+                                            <SelectValue placeholder="Select a unit" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="item">
+                                                Item
+                                            </SelectItem>
+                                            <SelectItem value="gr">
+                                                Gram
+                                            </SelectItem>
+                                            <SelectItem value="kg">
+                                                Kilogram
+                                            </SelectItem>
+                                            <SelectItem value="ml">
+                                                Milliliter
+                                            </SelectItem>
+                                            <SelectItem value="l">
+                                                Liter
+                                            </SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </FormField>
+
+                                <FormField
+                                    id="material_type"
+                                    label="Type"
+                                    error={errors.material_type}
+                                >
+                                    <Select
+                                        name="material_type"
+                                        defaultValue={material.material_type}
+                                    >
+                                        <SelectTrigger
+                                            id="material_type"
+                                            tabIndex={3}
+                                            className="w-full"
+                                        >
+                                            <SelectValue placeholder="Select a type" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="liquid">
+                                                Liquid
+                                            </SelectItem>
+                                            <SelectItem value="powder">
+                                                Powder
+                                            </SelectItem>
+                                            <SelectItem value="solid">
+                                                Solid
+                                            </SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </FormField>
 
                                 <div className="flex items-center gap-3">
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="unit">Unit</Label>
-                                        <Select
-                                            name="unit"
-                                            defaultValue={material.unit}
-                                        >
-                                            <SelectTrigger
-                                                id="unit"
-                                                tabIndex={3}
-                                            >
-                                                <SelectValue placeholder="Select a unit" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="item">
-                                                    Item
-                                                </SelectItem>
-                                                <SelectItem value="gr">
-                                                    Gram
-                                                </SelectItem>
-                                                <SelectItem value="kg">
-                                                    Kilogram
-                                                </SelectItem>
-                                                <SelectItem value="ml">
-                                                    Milliliter
-                                                </SelectItem>
-                                                <SelectItem value="l">
-                                                    Liter
-                                                </SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                        <InputError message={errors.unit} />
-                                    </div>
-
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="material_type">
-                                            Type
-                                        </Label>
-                                        <Select
-                                            name="material_type"
-                                            defaultValue={
-                                                material.material_type
-                                            }
-                                        >
-                                            <SelectTrigger
-                                                id="material_type"
-                                                tabIndex={3}
-                                            >
-                                                <SelectValue placeholder="Select a type" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="liquid">
-                                                    Liquid
-                                                </SelectItem>
-                                                <SelectItem value="powder">
-                                                    Powder
-                                                </SelectItem>
-                                                <SelectItem value="solid">
-                                                    Solid
-                                                </SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                        <InputError
-                                            message={errors.material_type}
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center gap-3 pt-2">
                                     <Button
                                         type="submit"
-                                        tabIndex={6}
+                                        tabIndex={4}
                                         data-test="add-material-button"
                                     >
                                         {processing && <Spinner />}
@@ -152,7 +150,6 @@ export default function EditMaterial({ material, stats }: Props) {
                                     <Button
                                         type="button"
                                         variant="outline"
-                                        size="sm"
                                         onClick={() => window.history.back()}
                                     >
                                         Cancel
@@ -166,3 +163,29 @@ export default function EditMaterial({ material, stats }: Props) {
         </>
     );
 }
+
+EditMaterial.layout = function Layout({
+    children,
+    material,
+}: {
+    children: ReactNode;
+    material: Material;
+}) {
+    return (
+        <AppLayout
+            breadcrumbs={[
+                { title: 'Materials', href: index() },
+                {
+                    title: 'Edit',
+                    href: edit(material.id),
+                },
+                {
+                    title: material.material_name,
+                    href: edit(material.id),
+                },
+            ]}
+        >
+            {children}
+        </AppLayout>
+    );
+};

@@ -34,7 +34,7 @@ export function SupplyRowField({
         );
 
     return (
-        <div className="flex items-end gap-3">
+        <div className="flex items-end gap-4">
             <div className="grid flex-1 gap-2">
                 <Input
                     type="text"
@@ -48,6 +48,7 @@ export function SupplyRowField({
                             material_id: matched?.id ?? null,
                         });
                     }}
+                    className='capitalize'
                 />
                 {row.material_name && !row.material_id && (
                     <p className="text-sm text-destructive">

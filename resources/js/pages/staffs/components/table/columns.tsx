@@ -29,14 +29,10 @@ export const getColumns = (
             <DataTableColumnHeader column={column} title="Role" />
         ),
         cell: ({ row }) => {
-            const roleName = row.original.roles?.[0]?.name ?? '-';
+            const roles = row.original.roles.map((role) => role.name).join(', ');
 
-            return (
-                <Badge variant="secondary" className="capitalize">
-                    {roleName}
-                </Badge>
-            );
-        },
+            return <Badge>{roles}</Badge>;
+        }
     },
     {
         accessorKey: 'created_at',

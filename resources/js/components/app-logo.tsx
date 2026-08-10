@@ -1,13 +1,14 @@
-import { Croissant } from 'lucide-react';
 import AppLogoIcon from '@/components/app-logo-icon';
+import { cn } from '@/lib/utils';
 
-export default function AppLogo() {
+type Props = {
+    className?: string;
+};
+
+export default function AppLogo({ className }: Props) {
     return (
         <>
-            <div className="flex aspect-square size-8 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
-                <Croissant className="size-5 fill-current text-white dark:text-black" />
-            </div>
-            <div className="ml-1 text-left text-sm">
+            <div className={cn("text-center font-extrabold", className)}>
                 <AppLogoIcon />
             </div>
         </>

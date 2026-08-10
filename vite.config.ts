@@ -30,7 +30,7 @@ export default defineConfig({
     ],
     server: {
         proxy: {
-            '/hero.svg': 'http://localhost:8000',
+            '/dashboard.jpg': 'http://localhost:8000',
         },
     },
 });

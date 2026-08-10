@@ -1,4 +1,4 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
 import type { FormEvent, ReactNode } from 'react';
 import { toast } from 'sonner';
@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import { useEditComposition } from '@/hooks/Composition Row/use-edit-composition';
 import AppLayout from '@/layouts/app-layout';
-import { update, show as compositionsShow } from '@/routes/compositions';
+import { update, index, edit } from '@/routes/compositions';
 import type { CakeWithCompositions, Material } from '@/types';
 import { CompositionsStatsHeader } from './components/composition-stats-header';
 import { CompositionRowField } from './components/row-field';
@@ -54,15 +54,15 @@ export default function EditComposition({ cake, materials, stats }: Props) {
 
                 <form
                     onSubmit={submit}
-                    className="w-full rounded-xl border p-4"
+                    className="w-full rounded-xl border p-6"
                 >
                     <FormHeader
                         title={`Edit Composition for ${cake.cake_name}`}
                         description="Update the composition details for this cake. You can modify the materials and their quantities as needed."
                     />
 
-                    <div className="grid gap-6">
-                        <div className="grid gap-3">
+                    <div className="grid gap-4">
+                        <div className="grid gap-4">
                             <Label>Materials</Label>
                             {data.materials.map((row, index) => (
                                 <CompositionRowField
@@ -108,12 +108,13 @@ export default function EditComposition({ cake, materials, stats }: Props) {
                                 {processing && <Spinner />}
                                 Update Composition
                             </Button>
-                            <Link
-                                href={compositionsShow.url(cake.id)}
-                                className="text-sm text-muted-foreground hover:underline"
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => window.history.back()}
                             >
                                 Cancel
-                            </Link>
+                            </Button>
                         </div>
                     </div>
                 </form>
@@ -132,15 +133,14 @@ EditComposition.layout = function Layout({
     return (
         <AppLayout
             breadcrumbs={[
-                { title: 'Cakes', href: '/cakes' },
-                { title: 'Compositions', href: `/compositions` },
-                {
-                    title: cake.cake_name,
-                    href: `/compositions/show-composition/${cake.id}`,
-                },
+                { title: 'Compositions', href: index() },
                 {
                     title: 'Edit',
-                    href: `/compositions/edit-composition/${cake.id}`,
+                    href: edit(cake.id),
+                },
+                {
+                    title: `${cake.cake_name}`,
+                    href: edit(cake.id),
                 },
             ]}
         >

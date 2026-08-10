@@ -92,18 +92,18 @@ export default function ShowSupply({ supply, stats }: Props) {
                     </CardHeader>
 
                     <CardContent className="col-span-2">
-                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
                             {supply.detail_supplies.map((detail) => (
                                 <Card
                                     key={detail.id}
-                                    className="gap-0 px-4 text-center capitalize"
+                                    className="gap-0 bg-secondary px-4 text-center text-background capitalize"
                                 >
                                     <p>
                                         {detail.quantity}{' '}
                                         {detail.material?.unit} -{' '}
                                         {detail.material?.material_name}
                                     </p>
-                                    <p className="text-sm text-muted-foreground">
+                                    <p className="text-sm text-muted">
                                         {formatRupiah(
                                             detail.material_price *
                                                 detail.quantity,
@@ -114,11 +114,15 @@ export default function ShowSupply({ supply, stats }: Props) {
                         </div>
                     </CardContent>
 
-                    <CardFooter className='gap-6'>
-                        <Button onClick={() => router.visit(edit(supply.id))}>
+                    <CardFooter className="gap-6">
+                        <Button
+                            variant="secondary"
+                            onClick={() => router.visit(edit(supply.id))}
+                        >
                             Edit Supply
                         </Button>
                         <Button
+                            variant="secondary"
                             onClick={() =>
                                 router.delete(destroy(supply.id), {
                                     onSuccess: () => {
@@ -131,8 +135,12 @@ export default function ShowSupply({ supply, stats }: Props) {
                         >
                             Cancel Supply
                         </Button>
-                        <Button onClick={() => router.visit(index())}>
-                            Back
+                        <Button
+                            type="button"
+                            variant="secondary"
+                            onClick={() => window.history.back()}
+                        >
+                            Cancel
                         </Button>
                     </CardFooter>
                 </Card>

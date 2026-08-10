@@ -8,19 +8,29 @@ use App\Models\Cake;
 use App\Models\Production;
 use App\Services\ProductionService;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ProductionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $productions = Production::with(['user', 'cake'])
-            ->when(request('search'), function ($query, $search) {
+            ->when($request->search, function ($query, $search) {
                 $query->whereHas('cake', function ($q) use ($search) {
                     $q->where('cake_name', 'like', "%{$search}%");
                 });
+            })
+            ->when($request->filter, function ($query, $filter) {
+                match ($filter) {
+                    'newest' => $query->latest(),
+                    'latest' => $query->oldest(),
+                    'completed' => $query->whereNull('cancelled_at'),
+                    'cancelled' => $query->whereNotNull('cancelled_at'),
+                    default => null,
+                };
             })
             ->paginate(8)
             ->withQueryString();
@@ -32,7 +42,8 @@ class ProductionController extends Controller
         ];
 
         return inertia('productions/production-history', [
-            'productions' => $productions,
+            'productions' => Inertia::scroll($productions),
+            'filters' => $request->only(['search', 'filter']),
             'stats' => $stats,
         ]);
     }

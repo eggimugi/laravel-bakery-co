@@ -13,7 +13,7 @@ export function AddOrderStats({ stats }: Props) {
         <div className="flex w-full flex-col justify-between gap-6 rounded-xl border p-6 xl:flex-row xl:items-center">
             <div>
                 <h1 className="text-2xl font-bold">Make Order</h1>
-                <p className="text-muted-foreground">
+                <p className="text-muted">
                     Make an order for your customers and manage their requests.
                 </p>
             </div>

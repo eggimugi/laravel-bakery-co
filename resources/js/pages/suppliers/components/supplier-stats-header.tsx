@@ -11,7 +11,7 @@ export function SupplierStatsHeader({ totalSuppliers }: Props) {
                 <h1 className="text-2xl font-bold">
                     Manage BakeryCo. Suppliers
                 </h1>
-                <p className="text-muted-foreground">
+                <p className="text-muted">
                     Manage your bakery suppliers and their details.
                 </p>
             </div>

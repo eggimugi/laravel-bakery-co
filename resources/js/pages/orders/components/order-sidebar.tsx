@@ -18,6 +18,7 @@ type Props = {
     decreaseQty: (cakeId: number) => void;
     increaseQty: (cakeId: number) => void;
     onCheckout: () => void;
+    isCheckingOut: boolean;
     open: boolean;
     totalQty: number;
 };
@@ -27,6 +28,7 @@ export function OrderSidebar({
     decreaseQty,
     increaseQty,
     onCheckout,
+    isCheckingOut,
     open,
     totalQty,
 }: Props) {
@@ -40,25 +42,27 @@ export function OrderSidebar({
         <div
             aria-hidden={!open}
             className={cn(
-                'shrink-0 pt-4 transition-[width,opacity] duration-300 ease-in-out',
+                'shrink-0 transition-[width,opacity] duration-300 ease-in-out',
                 open
-                    ? 'pointer-events-auto ml-4 w-full opacity-100 lg:w-80'
+                    ? 'pointer-events-auto ml-6 w-full opacity-100 lg:w-80'
                     : 'pointer-events-none w-0 opacity-0',
             )}
         >
             <aside
                 id="order-cart-panel"
                 className={cn(
-                    'sticky top-4 ml-auto flex w-full flex-col rounded-2xl border bg-card p-4 shadow-sm transition-all duration-300 ease-in-out',
+                    'sticky top-24 ml-auto flex max-h-[calc(87vh-2rem)] w-full flex-col rounded-2xl border bg-card p-4 shadow-sm transition-all duration-300 ease-in-out',
                     open ? 'translate-x-0' : 'translate-x-4',
                 )}
             >
                 <div className="flex items-center justify-between gap-3">
                     <div>
-                        <p className="text-sm font-medium text-muted-foreground">
+                        <p className="text-sm font-medium text-secondary">
                             Cart
                         </p>
-                        <h2 className="text-lg font-semibold">Order Summary</h2>
+                        <h2 className="text-lg font-semibold text-secondary">
+                            Order Summary
+                        </h2>
                     </div>
 
                     <div className="rounded-full border px-3 py-1 text-sm text-muted-foreground">
@@ -82,9 +86,12 @@ export function OrderSidebar({
                     </div>
                 ) : (
                     <>
-                        <div className="flex-1 space-y-3 overflow-y-auto pr-1">
+                        <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
                             {cartItems.map(({ cake, qty }) => (
-                                <Card key={cake.id} className="border-muted">
+                                <Card
+                                    key={cake.id}
+                                    className="border-muted py-0"
+                                >
                                     <CardContent className="space-y-3 p-3">
                                         <div className="flex items-start justify-between gap-3">
                                             <div className="min-w-0 capitalize">
@@ -158,12 +165,17 @@ export function OrderSidebar({
                                 <span className="text-sm text-muted-foreground">
                                     Total
                                 </span>
-                                <span className="text-lg font-semibold">
+                                <span className="text-lg font-semibold text-secondary">
                                     {formatRupiah(totalPrice)}
                                 </span>
                             </div>
 
-                            <Button className="w-full" onClick={onCheckout}>
+                            <Button
+                                className="w-full"
+                                variant="secondary"
+                                onClick={onCheckout}
+                                disabled={isCheckingOut}
+                            >
                                 Checkout
                             </Button>
                         </div>

@@ -9,9 +9,9 @@ export default function AuthSimpleLayout({
     description,
 }: AuthLayoutProps) {
     return (
-        <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10">
-            <div className="w-full max-w-sm">
-                <div className="flex flex-col gap-8">
+        <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10 text-secondary">
+            <div className="w-full max-w-lg">
+                <div className="flex flex-col gap-8 border border-secondary py-8 px-12 rounded-xl">
                     <div className="flex flex-col items-center gap-4">
                         <Link
                             href={home()}
@@ -23,9 +23,9 @@ export default function AuthSimpleLayout({
                             <span className="sr-only">{title}</span>
                         </Link>
 
-                        <div className="space-y-2 text-center">
+                        <div className="space-y-1 text-center">
                             <h1 className="text-xl font-medium">{title}</h1>
-                            <p className="text-center text-sm text-muted-foreground">
+                            <p className="text-center text-sm">
                                 {description}
                             </p>
                         </div>

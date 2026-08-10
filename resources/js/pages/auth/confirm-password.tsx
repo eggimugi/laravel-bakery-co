@@ -47,6 +47,7 @@ export default function ConfirmPassword() {
                                 className="w-full"
                                 disabled={processing}
                                 data-test="confirm-password-button"
+                                variant="secondary"
                             >
                                 {processing && <Spinner />}
                                 Confirm password

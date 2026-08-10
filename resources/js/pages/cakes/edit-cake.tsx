@@ -1,7 +1,11 @@
 import { Form, Head } from '@inertiajs/react';
+import { useState } from 'react';
+import type { ReactNode } from 'react';
 import { toast } from 'sonner';
 import { Container } from '@/components/container';
+import { FormField } from '@/components/form/form-field';
 import InputError from '@/components/form/input-error';
+import { NumberInput } from '@/components/form/number-input';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,89 +17,151 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Spinner } from '@/components/ui/spinner';
-import { update } from '@/routes/cakes';
+import AppLayout from '@/layouts/app-layout';
+import { edit, index, update } from '@/routes/cakes';
 import type { Cake } from '@/types';
 import { CakeStatsHeader } from './components/cake-stats-header';
 
 type Props = {
     cake: Cake;
     totalCakes: number;
+    lessStockCakes: number;
 };
 
-export default function EditCake({ cake, totalCakes }: Props) {
+export default function EditCake({ cake, totalCakes, lessStockCakes }: Props) {
+    const [cakePrice, setCakePrice] = useState<number | ''>(cake.cake_price);
+
     return (
         <>
             <Head title="Edit Cake" />
             <Container>
-                <CakeStatsHeader totalCakes={totalCakes} />
+                <CakeStatsHeader
+                    totalCakes={totalCakes}
+                    lowStock={lessStockCakes}
+                />
 
                 <Form
                     {...update.form(cake.id)}
-                    onSuccess={() => toast.success('Cake updated successfully.')}
-                    className="mt-10 w-full rounded-xl border p-4"
+                    onSuccess={() =>
+                        toast.success('Cake updated successfully.')
+                    }
+                    className="w-full rounded-xl border p-6"
                 >
                     {({ processing, errors }) => (
                         <>
-                            <div className="mb-6">
-                                <h1 className="text-2xl font-bold">
-                                    Edit Cake
+                            <div className="mb-4">
+                                <h1 className="text-2xl font-bold capitalize">
+                                    Edit Cake {cake.cake_name}
                                 </h1>
-                                <p className="text-muted-foreground">
+                                <p className="text-muted">
                                     Update the cake information.
                                 </p>
                             </div>
 
-                            <div className="grid gap-6">
-                                <div className="grid gap-2">
-                                    <Label htmlFor="cake_name">Cake Name</Label>
-                                    <Input
+                            <div className="grid gap-4">
+                                <div className="grid grid-cols-3 gap-4">
+                                    <FormField
                                         id="cake_name"
-                                        type="text"
-                                        autoFocus
-                                        tabIndex={1}
-                                        autoComplete="cake_name"
-                                        name="cake_name"
-                                        placeholder="Cake name"
-                                        defaultValue={cake.cake_name}
-                                    />
-                                    <InputError message={errors.cake_name} />
-                                </div>
-
-                                <div className="grid gap-2">
-                                    <Label htmlFor="cake_price">
-                                        Cake Price
-                                    </Label>
-                                    <Input
-                                        id="cake_price"
-                                        type="number"
-                                        tabIndex={2}
-                                        autoComplete="price"
-                                        name="cake_price"
-                                        placeholder="0.00"
-                                        defaultValue={cake.cake_price}
-                                    />
-                                    <InputError message={errors.cake_price} />
-                                </div>
-
-                                <div className="grid gap-2">
-                                    <Label htmlFor="unit">Unit</Label>
-                                    <Select
-                                        name="unit"
-                                        defaultValue={cake.unit}
+                                        label="Cake Name"
+                                        error={errors.cake_name}
                                     >
-                                        <SelectTrigger id="unit" tabIndex={3}>
-                                            <SelectValue placeholder="Select a unit" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="piece">
-                                                Piece
-                                            </SelectItem>
-                                            <SelectItem value="tray">
-                                                Tray
-                                            </SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                    <InputError message={errors.unit} />
+                                        <Input
+                                            id="cake_name"
+                                            type="text"
+                                            autoFocus
+                                            tabIndex={1}
+                                            autoComplete="cake_name"
+                                            name="cake_name"
+                                            placeholder="Cake name"
+                                            defaultValue={cake.cake_name}
+                                            className="capitalize"
+                                        />
+                                    </FormField>
+
+                                    <FormField
+                                        id="cake_price"
+                                        label="Cake Price"
+                                        error={errors.cake_price}
+                                    >
+                                        <NumberInput
+                                            id="cake_price"
+                                            name="cake_price"
+                                            required
+                                            tabIndex={2}
+                                            autoComplete="price"
+                                            placeholder="0"
+                                            min={0}
+                                            clampOnBlur={false}
+                                            formatThousands
+                                            prefix="Rp"
+                                            value={cakePrice}
+                                            onValueChange={setCakePrice}
+                                        />
+                                    </FormField>
+
+                                    <FormField
+                                        id="unit"
+                                        label="Unit"
+                                        error={errors.unit}
+                                    >
+                                        <Select
+                                            name="unit"
+                                            defaultValue={cake.unit}
+                                        >
+                                            <SelectTrigger
+                                                id="unit"
+                                                tabIndex={3}
+                                                className="w-full"
+                                            >
+                                                <SelectValue placeholder="Select a unit" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="piece">
+                                                    Piece
+                                                </SelectItem>
+                                                <SelectItem value="tray">
+                                                    Tray
+                                                </SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </FormField>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <FormField
+                                        id="best_before"
+                                        label="Best Before"
+                                        error={errors.best_before}
+                                    >
+                                        <Input
+                                            id="best_before"
+                                            type="date"
+                                            tabIndex={4}
+                                            autoComplete="best-before"
+                                            name="best_before"
+                                            defaultValue={cake.best_before?.slice(
+                                                0,
+                                                10,
+                                            )}
+                                        />
+                                    </FormField>
+
+                                    <FormField
+                                        id="cake_flavour"
+                                        label="Cake Flavour"
+                                        error={errors.cake_flavour}
+                                    >
+                                        <Input
+                                            id="cake_flavour"
+                                            type="text"
+                                            tabIndex={5}
+                                            autoComplete="flavour"
+                                            name="cake_flavour"
+                                            placeholder="Flavour name"
+                                            defaultValue={cake.cake_flavour}
+                                            className="capitalize"
+                                        />
+                                    </FormField>
                                 </div>
 
                                 <div className="grid gap-2">
@@ -105,7 +171,7 @@ export default function EditCake({ cake, totalCakes }: Props) {
                                     <Input
                                         id="cake_image"
                                         type="text"
-                                        tabIndex={4}
+                                        tabIndex={6}
                                         autoComplete="image"
                                         name="cake_image"
                                         placeholder="Image URL"
@@ -113,47 +179,13 @@ export default function EditCake({ cake, totalCakes }: Props) {
                                     />
                                     <InputError message={errors.cake_image} />
                                 </div>
-
-                                <div className="grid gap-2">
-                                    <Label htmlFor="best_before">
-                                        Best Before
-                                    </Label>
-                                    <Input
-                                        id="best_before"
-                                        type="date"
-                                        tabIndex={5}
-                                        autoComplete="best-before"
-                                        name="best_before"
-                                        defaultValue={cake.best_before?.slice(
-                                            0,
-                                            10,
-                                        )}
-                                    />
-                                    <InputError message={errors.best_before} />
-                                </div>
-
-                                <div className="grid gap-2">
-                                    <Label htmlFor="cake_flavour">
-                                        Cake Flavour
-                                    </Label>
-                                    <Input
-                                        id="cake_flavour"
-                                        type="text"
-                                        tabIndex={6}
-                                        autoComplete="flavour"
-                                        name="cake_flavour"
-                                        placeholder="Flavour name"
-                                        defaultValue={cake.cake_flavour}
-                                    />
-                                    <InputError message={errors.cake_flavour} />
-                                </div>
                             </div>
 
                             <div className="mt-6 flex items-center gap-4">
                                 <Button
                                     type="submit"
+                                    tabIndex={7}
                                     disabled={processing}
-                                    className="bg-primary text-primary-foreground hover:bg-primary/90"
                                 >
                                     {processing && <Spinner />}
                                     Update Cake
@@ -161,7 +193,6 @@ export default function EditCake({ cake, totalCakes }: Props) {
                                 <Button
                                     type="button"
                                     variant="outline"
-                                    size="sm"
                                     onClick={() => window.history.back()}
                                 >
                                     Cancel
@@ -174,3 +205,29 @@ export default function EditCake({ cake, totalCakes }: Props) {
         </>
     );
 }
+
+EditCake.layout = function Layout({
+    children,
+    cake,
+}: {
+    children: ReactNode;
+    cake: Cake;
+}) {
+    return (
+        <AppLayout
+            breadcrumbs={[
+                { title: 'Cakes', href: index() },
+                {
+                    title: 'Edit',
+                    href: edit(cake.id),
+                },
+                {
+                    title: cake.cake_name,
+                    href: edit(cake.id),
+                },
+            ]}
+        >
+            {children}
+        </AppLayout>
+    );
+};

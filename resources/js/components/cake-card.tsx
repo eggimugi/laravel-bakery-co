@@ -22,7 +22,7 @@ export function CakeCard({ cake }: Props) {
                         Available: {cake.stock}
                     </Badge>
 
-                    <Badge className="capitalize">
+                    <Badge variant="secondary" className="text-sm capitalize">
                         {cake.orders_count} Orders
                     </Badge>
                 </div>

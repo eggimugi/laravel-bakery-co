@@ -1,11 +1,9 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { toast } from 'sonner';
 import { Container } from '@/components/container';
 import { FormField } from '@/components/form/form-field';
-import { FormHeader } from '@/components/form/form-header';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -30,7 +28,12 @@ type Props = {
     };
 };
 
-export default function EditSupply({ supply, suppliers, materials, stats }: Props) {
+export default function EditSupply({
+    supply,
+    suppliers,
+    materials,
+    stats,
+}: Props) {
     const {
         data,
         setData,
@@ -40,7 +43,7 @@ export default function EditSupply({ supply, suppliers, materials, stats }: Prop
         addRow,
         removeRow,
         put,
-        reset
+        reset,
     } = useEditSupply(supply);
 
     const submit = (e: React.FormEvent) => {
@@ -48,8 +51,8 @@ export default function EditSupply({ supply, suppliers, materials, stats }: Prop
         put(update.url(supply.id), {
             onSuccess: () => {
                 toast.success('Supply updated successfully');
-                reset()
-            }
+                reset();
+            },
         });
     };
 
@@ -61,82 +64,74 @@ export default function EditSupply({ supply, suppliers, materials, stats }: Prop
             <Container>
                 <SupplyStatsHeader stats={stats} />
 
-                <div className="grid grid-cols-3 rounded-xl border p-4">
-                    <div className="flex flex-col gap-8">
-                        <div>
-                            <h1 className="text-2xl font-bold">
-                                Edit Detail Supply
-                            </h1>
-                            <h2 className="text-lg font-medium">
-                                {supply.supplier.supplier_name}
-                            </h2>
-                            <p className="text-sm text-muted-foreground">
-                                {formatDate(supply.supply_date)}
-                            </p>
+                <div className="grid gap-6 rounded-xl border p-6">
+                    <div>
+                        <h1 className="text-2xl font-bold">
+                            Edit Detail Supply
+                        </h1>
 
-                            <p className="mt-12 mb-3 font-medium">
-                                Supplier Information
-                            </p>
-                            <p className="text-muted-foreground">
-                                <span className="font-medium text-primary capitalize">
-                                    Address:
-                                </span>{' '}
-                                {supply.supplier.supplier_address}
-                            </p>
-                            <p className="text-muted-foreground">
-                                <span className="font-medium text-primary">
-                                    Phone:
-                                </span>{' '}
-                                {supply.supplier.supplier_phone}
-                            </p>
-                        </div>
+                        <div className="flex gap-16">
+                            <div>
+                                <h2 className="text-lg font-medium">
+                                    {supply.supplier.supplier_name}
+                                </h2>
+                                <p className="text-muted">
+                                    {formatDate(supply.supply_date)}
+                                </p>
+                            </div>
 
-                        <div>
-                            <p>
-                                <span className="font-semibold">
-                                    Total Items:
+                            <div>
+                                <p className="text-muted">
+                                    <span className="font-medium text-background capitalize">
+                                        Address:
+                                    </span>{' '}
+                                    {supply.supplier.supplier_address}
+                                </p>
+                                <p className="text-muted">
+                                    <span className="font-medium text-background">
+                                        Phone:
+                                    </span>{' '}
+                                    {supply.supplier.supplier_phone}
+                                </p>
+                            </div>
+
+                            <div>
+                                <p className="text-muted">
+                                    <span className="font-medium text-background capitalize">
+                                        Total Items:
+                                    </span>{' '}
+                                    {supply.detail_supplies.length}
+                                </p>
+                                <p className="text-muted">
+                                    <span className="font-medium text-background capitalize">
+                                        Cost:
+                                    </span>{' '}
+                                    {formatRupiah(
+                                        supply.detail_supplies.reduce(
+                                            (total, item) =>
+                                                total +
+                                                item.material_price *
+                                                    item.quantity,
+                                            0,
+                                        ),
+                                    )}
+                                </p>
+                            </div>
+
+                            <p className="text-muted">
+                                <span className="font-medium text-background capitalize">
+                                    Status:
                                 </span>{' '}
-                                {supply.detail_supplies.length}
-                            </p>
-                            <p>
-                                <span className="font-semibold">Cost:</span>{' '}
-                                {formatRupiah(
-                                    supply.detail_supplies.reduce(
-                                        (total, item) =>
-                                            total +
-                                            item.material_price * item.quantity,
-                                        0,
-                                    ),
-                                )}
-                            </p>
-                            <p>
-                                <span className="font-semibold">Status:</span>{' '}
-                                <Badge
-                                    variant={
-                                        supply.cancelled_at
-                                            ? 'default'
-                                            : 'secondary'
-                                    }
-                                >
-                                    {supply.cancelled_at
-                                        ? 'Cancelled'
-                                        : 'Completed'}
-                                </Badge>
+                                {supply.cancelled_at
+                                    ? 'Cancelled'
+                                    : 'Completed'}
                             </p>
                         </div>
                     </div>
 
-                    <div className="col-span-2">
-                        <form
-                            onSubmit={submit}
-                            className="w-full rounded-xl border p-4"
-                        >
-                            <FormHeader
-                                title={`Edit supply data for ${supply.supplier.supplier_name} on ${formatDate(supply.supply_date)}`}
-                                description="Edit the supply data for your bakery. Fill in the details below to update materials and their quantities."
-                            />
-
-                            <div className="grid gap-6">
+                    <form onSubmit={submit}>
+                        <div className="grid gap-4">
+                            <div className="grid grid-cols-2 gap-4">
                                 <FormField
                                     id="supplier"
                                     label="Supplier"
@@ -189,77 +184,74 @@ export default function EditSupply({ supply, suppliers, materials, stats }: Prop
                                         }
                                     />
                                 </FormField>
+                            </div>
 
-                                <div className="grid gap-6">
-                                    <div className="grid gap-3">
-                                        <Label>Materials</Label>
-                                        {data.items.map((row, index) => (
-                                            <SupplyRowField
-                                                key={row.key}
-                                                row={row}
-                                                index={index}
-                                                materials={materials}
-                                                error={{
-                                                    materialId:
-                                                        errors[
-                                                            `items.${index}.material_id`
-                                                        ],
-                                                    material_price:
-                                                        errors[
-                                                            `items.${index}.material_price`
-                                                        ],
-                                                    quantity:
-                                                        errors[
-                                                            `items.${index}.quantity`
-                                                        ],
-                                                    unit: errors[
-                                                        `items.${index}.unit`
+                            <div className="grid gap-4">
+                                <div className="grid gap-4">
+                                    <Label>Materials</Label>
+                                    {data.items.map((row, index) => (
+                                        <SupplyRowField
+                                            key={row.key}
+                                            row={row}
+                                            index={index}
+                                            materials={materials}
+                                            error={{
+                                                materialId:
+                                                    errors[
+                                                        `items.${index}.material_id`
                                                     ],
-                                                }}
-                                                canRemove={
-                                                    data.items.length > 1
-                                                }
-                                                onChange={(patch) =>
-                                                    updateRow(row.key, patch)
-                                                }
-                                                onRemove={() =>
-                                                    removeRow(row.key)
-                                                }
-                                            />
-                                        ))}
+                                                material_price:
+                                                    errors[
+                                                        `items.${index}.material_price`
+                                                    ],
+                                                quantity:
+                                                    errors[
+                                                        `items.${index}.quantity`
+                                                    ],
+                                                unit: errors[
+                                                    `items.${index}.unit`
+                                                ],
+                                            }}
+                                            canRemove={data.items.length > 1}
+                                            onChange={(patch) =>
+                                                updateRow(row.key, patch)
+                                            }
+                                            onRemove={() => removeRow(row.key)}
+                                        />
+                                    ))}
 
-                                        <Button
-                                            type="button"
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={addRow}
-                                            className="w-fit"
-                                        >
-                                            <Plus className="mr-1 h-4 w-4" />{' '}
-                                            Add Material
-                                        </Button>
-                                    </div>
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={addRow}
+                                        className="w-fit"
+                                    >
+                                        <Plus className="mr-1 h-4 w-4" /> Add
+                                        Material
+                                    </Button>
+                                </div>
 
-                                    <div className="flex items-center gap-3 pt-2">
-                                        <Button
-                                            type="submit"
-                                            disabled={processing}
-                                            data-test="add-supply-button"
-                                        >
-                                            {processing && <Spinner />}
-                                            Update Supply
-                                        </Button>
-                                        <Link
-                                            href={index()}
-                                            className="text-sm text-muted-foreground hover:underline"
-                                        >
-                                            Cancel
-                                        </Link>
-                                    </div>
+                                <div className="flex items-center gap-3 pt-2">
+                                    <Button
+                                        type="submit"
+                                        disabled={processing}
+                                        data-test="add-supply-button"
+                                    >
+                                        {processing && <Spinner />}
+                                        Update Supply
+                                    </Button>
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        onClick={() => window.history.back()}
+                                    >
+                                        Cancel
+                                    </Button>
                                 </div>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </Container>
         </>

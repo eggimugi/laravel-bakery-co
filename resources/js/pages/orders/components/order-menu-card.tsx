@@ -66,7 +66,7 @@ export function OrderMenuCard({
                                     addToCart(cake);
                                 }}
                                 variant={
-                                    cake.stock > 0 ? 'default' : 'secondary'
+                                    cake.stock > 0 ? 'secondary' : 'secondary'
                                 }
                             >
                                 Add to Cart

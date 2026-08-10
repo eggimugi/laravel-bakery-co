@@ -20,6 +20,15 @@ class CompositionController extends Controller
                 $query->where('cake_name', 'like', "%{$search}%")
                     ->orWhere('cake_flavour', 'like', "%{$search}%");
             })
+            ->when($request->filter, function ($query, $filter) {
+                match ($filter) {
+                    'composition' => $query->has('compositions'),
+                    'no_composition' => $query->doesntHave('compositions'),
+                    'tray' => $query->where('unit', 'tray'),
+                    'piece' => $query->where('unit', 'piece'),
+                    default => null,
+                };
+            })
             ->paginate(8)
             ->withQueryString();
 
@@ -30,7 +39,8 @@ class CompositionController extends Controller
         ];
 
         return Inertia::render('compositions/index', [
-            'cakes' => $cakes,
+            'cakes' => Inertia::scroll($cakes),
+            'filters' => $request->only(['search', 'filter']),
             'stats' => $stats,
         ]);
     }
