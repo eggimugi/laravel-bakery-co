@@ -37,7 +37,7 @@ export default function Login({ status }: Props) {
                                     tabIndex={1}
                                     autoComplete="off"
                                     placeholder="email@example.com"
-                                    className='border-secondary placeholder:text-muted'
+                                    className="border-muted placeholder:text-muted"
                                 />
                                 <InputError message={errors.email} />
                             </div>
@@ -50,7 +50,7 @@ export default function Login({ status }: Props) {
                                     tabIndex={2}
                                     autoComplete="off"
                                     placeholder="Password"
-                                    className='border-secondary placeholder:text-muted'
+                                    className="border-muted placeholder:text-muted"
                                 />
                                 <InputError message={errors.password} />
                             </div>
@@ -60,7 +60,7 @@ export default function Login({ status }: Props) {
                                     id="remember"
                                     name="remember"
                                     tabIndex={3}
-                                    className='border-secondary'
+                                    className="border-secondary"
                                 />
                                 <Label htmlFor="remember">Remember me</Label>
                             </div>
@@ -88,29 +88,23 @@ export default function Login({ status }: Props) {
                 )}
             </Form>
 
-            <div className="space-y-4">
+            <div className="space-y-4 text-sm">
                 <div>
                     <p className="text-sm font-semibold"> Owner: </p>
-                    <p className="space-x-4 text-sm">
-                        <span>owner@mail.com</span>
-                        Password: <span>password123</span>
-                    </p>
+                    <p>owner@mail.com</p>
+                    <p>password123</p>
                 </div>
 
                 <div>
                     <p className="text-sm font-semibold"> Manager: </p>
-                    <p className="space-x-4 text-sm">
-                        <span>melba.jones@example.net</span>
-                        Password: <span>password</span>
-                    </p>
+                    <p>melba.jones@example.net</p>
+                    <p>password</p>
                 </div>
 
                 <div>
                     <p className="text-sm font-semibold"> Cashier: </p>
-                    <p className="space-x-4 text-sm">
-                        <span>adan.padberg@example.com</span>
-                        Password: <span>password</span>
-                    </p>
+                    <p>adan.padberg@example.com</p>
+                    <p>password</p>
                 </div>
             </div>
 

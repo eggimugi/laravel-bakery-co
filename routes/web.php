@@ -70,3 +70,4 @@ require __DIR__.'/suppliers.php';
 require __DIR__.'/supplies.php';
 require __DIR__.'/productions.php';
 require __DIR__.'/orders.php';
+require __DIR__.'/checkouts.php';

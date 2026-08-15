@@ -23,6 +23,7 @@ class OrderService
                 'user_id' => $userId,
                 'order_date' => $now,
                 'status' => 'processing',
+                'payment_method' => $validated['payment_method'],
             ]);
 
             $rows = array_map(fn (array $item) => [

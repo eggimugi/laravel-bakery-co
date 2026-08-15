@@ -1,12 +1,12 @@
 import { Head, InfiniteScroll, router, usePage } from '@inertiajs/react';
 import { ShoppingBasket, SlidersVertical } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { toast } from 'sonner';
 import { Container } from '@/components/container';
 import { SearchInput } from '@/components/search-input.tsx';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils.ts';
-import { index, store } from '@/routes/orders';
+import { index as checkout } from '@/routes/checkouts/index.ts';
+import { index } from '@/routes/orders';
 import type { Cake } from '@/types';
 import { AddOrderStats } from './components/add-order-stats.tsx';
 import { OrderMenuCard } from './components/order-menu-card.tsx';
@@ -45,7 +45,7 @@ export default function Order({ cakes, stats }: Props) {
     const toggleCart = () => {
         setIsCartOpen((currentOpen) => {
             const next = !currentOpen;
-            document.cookie = `cart_state=${next}; path=/; max-age=${60 * 60 * 24 * 7}`; // 7 hari
+            document.cookie = `cart_state=${next}; path=/; max-age=${60 * 60 * 24 * 7}`;
 
             return next;
         });
@@ -64,12 +64,11 @@ export default function Order({ cakes, stats }: Props) {
         setIsCheckingOut(true);
 
         router.post(
-            store.url(),
+            checkout.url(),
             { items },
             {
                 onSuccess: () => {
                     setIsCheckingOut(false);
-                    toast.success('Order placed successfully');
                 },
                 onError: () => setIsCheckingOut(false),
                 onFinish: () => setIsCheckingOut(false),

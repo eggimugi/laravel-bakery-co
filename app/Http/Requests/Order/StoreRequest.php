@@ -26,15 +26,13 @@ class StoreRequest extends FormRequest
             'items' => 'required|array|min:1',
             'items.*.cake_id' => 'required|exists:cakes,id',
             'items.*.quantity' => 'required|integer|min:1',
+            'payment_method' => 'required|in:cash,e_wallet,credit_card,bank_transfer',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'order_date.required' => 'Order date is required.',
-            'order_date.date' => 'Order date must be a valid date.',
-            'order_date.after_or_equal' => 'Order date cannot be in the past.',
             'items.required' => 'At least one item is required.',
             'items.array' => 'Items must be an array.',
             'items.min' => 'At least one item is required.',
@@ -43,6 +41,8 @@ class StoreRequest extends FormRequest
             'items.*.quantity.required' => 'Quantity is required for each item.',
             'items.*.quantity.integer' => 'Quantity must be an integer.',
             'items.*.quantity.min' => 'Quantity must be at least 1.',
+            'payment_method.required' => 'Payment method is required.',
+            'payment_method.in' => 'Selected payment method is invalid.',
         ];
     }
 }

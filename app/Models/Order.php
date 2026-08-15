@@ -13,6 +13,7 @@ class Order extends Model
         'user_id',
         'order_date',
         'status',
+        'payment_method',
         'cancelled_at',
     ];
 
